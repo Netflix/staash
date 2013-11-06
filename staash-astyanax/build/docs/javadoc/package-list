@@ -1,0 +1,14 @@
+com.netflix.paas.cassandra
+com.netflix.paas.cassandra.admin
+com.netflix.paas.cassandra.discovery
+com.netflix.paas.cassandra.entity
+com.netflix.paas.cassandra.events
+com.netflix.paas.cassandra.keys
+com.netflix.paas.cassandra.provider
+com.netflix.paas.cassandra.provider.impl
+com.netflix.paas.cassandra.resources
+com.netflix.paas.cassandra.resources.admin
+com.netflix.paas.cassandra.service
+com.netflix.paas.cassandra.tasks
+com.netflix.paas.dao.astyanax
+com.netflix.paas.dao.meta

@@ -1,0 +1,12 @@
+com.netflix.paas.mesh
+com.netflix.paas.mesh.client
+com.netflix.paas.mesh.client.memory
+com.netflix.paas.mesh.db
+com.netflix.paas.mesh.db.memory
+com.netflix.paas.mesh.endpoints
+com.netflix.paas.mesh.jersey
+com.netflix.paas.mesh.messages
+com.netflix.paas.mesh.seed
+com.netflix.paas.mesh.server
+com.netflix.paas.mesh.server.handlers
+com.netflix.paas.mesh.server.tasks

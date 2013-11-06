@@ -1,0 +1,7 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.netflix.paas.TestSchemaData" tests="1" failures="0" errors="0" timestamp="2013-10-25T20:40:33" hostname="lgml-ssingh" time="0.0">
+  <properties/>
+  <ignored-testcase name="test" classname="com.netflix.paas.TestSchemaData" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

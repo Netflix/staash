@@ -1,0 +1,121 @@
+// Establish version and status
+ext.githubProjectName = rootProject.name // Change if github project name is not the same as the root project's name
+//ext.githubProjectName = "staash"
+ext {
+    astyanax_version="1.56.37"
+}
+
+buildscript {
+    repositories { mavenCentral() }
+    apply from: file('gradle/buildscript.gradle'), to: buildscript 
+}
+
+allprojects {
+    repositories { mavenCentral() }
+}
+
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'osgi'
+
+apply from: file('gradle/convention.gradle')
+apply from: file('gradle/maven.gradle')
+//apply from: file('gradle/check.gradle')
+//apply from: file('gradle/license.gradle')
+apply from: file('gradle/release.gradle')
+
+subprojects {
+    group = "com.netflix.${githubProjectName}" // TEMPLATE: Set to organization of project
+
+    dependencies {
+        compile     'org.codehaus.jackson:jackson-core-asl:1.9.7'
+        compile     'org.codehaus.jackson:jackson-mapper-asl:1.9.7'
+        compile     'com.netflix.archaius:archaius-core:0.1.4'
+        compile     'com.netflix.governator:governator:1.0.4'
+        compile     'javax.ws.rs:jsr311-api:1.1.1'
+        compile     'com.google.inject:guice:3.0'
+        compile     'com.google.inject.extensions:guice-multibindings:3.0'
+        compile     'com.sun.jersey:jersey-core:1.17.1'
+        compile     'com.sun.jersey:jersey-server:1.17.1'
+        compile     'com.sun.jersey.contribs:jersey-guice:1.17.1'
+        compile     'org.slf4j:slf4j-api:1.6.3'
+        compile     'javax.persistence:persistence-api:1.0'
+        compile     'com.google.guava:guava:14.0'
+        compile     'com.netflix.eureka:eureka-client:1.1.73'
+        compile     'cglib:cglib:2.2';
+        compile     'org.javassist:javassist:3.17.1-GA'
+        compile     'com.fasterxml.jackson.core:jackson-databind:2.2.2'
+        compile     'com.datastax.cassandra:cassandra-driver-core:1.0.1'
+        compile     'com.beust:jcommander:1.5'
+        compile     'org.hamcrest:hamcrest-all:1.1'
+        testCompile 'junit:junit:4.11'
+        testCompile 'org.mockito:mockito-core:1.8.5'
+    }
+}
+
+project(':staash-core') {
+    apply plugin: 'java'
+    dependencies {
+        testCompile 'junit:junit:4.11'
+    }
+}
+
+project(':staash-jetty') {
+    apply plugin: 'java'
+    dependencies {
+        compile     'javax.servlet:servlet-api:2.5'
+        compile     'com.sun.jersey:jersey-server:1.17'
+        compile     'org.eclipse.jetty:jetty-servlet:7.6.7.v20120910'
+        compile     project(':staash-core')
+        compile     project(':staash-astyanax')
+        compile     project(':staash-eureka')
+        testCompile 'junit:junit:4.11'
+    }
+}
+
+project(':staash-astyanax') {
+    apply plugin: 'java'
+    dependencies {
+        compile     "com.netflix.astyanax:astyanax-core:$astyanax_version"
+        compile     "com.netflix.astyanax:astyanax-thrift:$astyanax_version"
+        compile     "com.netflix.astyanax:astyanax-cassandra:$astyanax_version"
+        compile     "com.netflix.astyanax:astyanax-entity-mapper:$astyanax_version"
+        compile     project(':staash-core')
+        testCompile 'junit:junit:4.11'
+    }
+}
+
+
+project(':staash-eureka') {
+    apply plugin: 'java'
+    dependencies {
+        compile     project(':staash-core')
+        compile     project(':staash-astyanax')
+    }
+}
+
+project(':staash-mesh') {
+    apply plugin: 'java'
+    dependencies {
+        compile     "com.netflix.astyanax:astyanax-core:$astyanax_version"
+        compile     "com.netflix.astyanax:astyanax-thrift:$astyanax_version"
+        compile     "com.netflix.astyanax:astyanax-cassandra:$astyanax_version"
+        compile     project(':staash-core')
+    }
+}
+
+project(':staash-svc') {
+    apply plugin: 'war'
+    dependencies {
+        compile     'javax.servlet:servlet-api:2.5'
+        compile     'com.sun.jersey:jersey-server:1.17'
+        compile     'org.eclipse.jetty:jetty-servlet:7.6.7.v20120910'
+        compile     project(':staash-core')
+        compile     project(':staash-astyanax')
+        compile     project(':staash-eureka')
+        testCompile 'junit:junit:4.11'
+    }
+    //war {
+    //}
+
+}

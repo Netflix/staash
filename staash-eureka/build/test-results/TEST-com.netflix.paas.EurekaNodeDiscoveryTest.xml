@@ -1,0 +1,10 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="com.netflix.paas.EurekaNodeDiscoveryTest" tests="1" failures="0" errors="0" timestamp="2013-10-25T20:40:21" hostname="lgml-ssingh" time="6.745">
+  <properties/>
+  <testcase name="testSupplier" classname="com.netflix.paas.EurekaNodeDiscoveryTest" time="6.745"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[log4j:WARN No appenders could be found for logger (com.netflix.governator.lifecycle.ClasspathScanner).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+]]></system-err>
+</testsuite>
