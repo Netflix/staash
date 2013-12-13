@@ -16,4 +16,4 @@ Some features provided in Staash
     o Ablity to be able to join a dataset across storage systems.
     o Ability to creat, read and write to a simple event-seris(in development).
     o Ability to create read and write to a prefix event series(in development).
-
+    o simple rest apit for a k-v store(in progress)
