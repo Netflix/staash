@@ -1,8 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="com.netflix.paas.ArchaeusPassConfigurationTest" tests="2" failures="0" errors="0" timestamp="2013-10-25T20:40:16" hostname="lgml-ssingh" time="0.001">
-  <properties/>
-  <ignored-testcase name="testWithInjection" classname="com.netflix.paas.ArchaeusPassConfigurationTest" time="0.0"/>
-  <ignored-testcase name="test" classname="com.netflix.paas.ArchaeusPassConfigurationTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

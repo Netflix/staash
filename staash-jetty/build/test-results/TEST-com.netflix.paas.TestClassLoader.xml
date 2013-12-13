@@ -1,7 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="com.netflix.paas.TestClassLoader" tests="1" failures="0" errors="0" timestamp="2013-10-25T20:40:33" hostname="lgml-ssingh" time="0.003">
-  <properties/>
-  <testcase name="testLoader" classname="com.netflix.paas.TestClassLoader" time="0.003"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
