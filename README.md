@@ -1,7 +1,7 @@
 As the complexity of the data land-scape grows the application developers are left to wrestle with a lot of details that they should be immune to. Buzzwords like no-sql,k-v store, document storage etc are confusing to  grapple with for a dev who has been purely working on relational technologies. Staash is a rest based service for accessing a data store, it is an ambitious project but some of the initial aims of the project are geared towards automating the common data access patterns and hiding the complexity of underlying system for developers. To that end in this initial release   we  offer implementation of a metadata layer and pattern automation and corresponding apis for  Cassandra and Mysql(just for proof).
 
 
-For more information http://github.com/netflix/sarc/wiki
+For more information http://github.com/Netflix/staash/wiki
 
 This is the first release of Staash and it is currently being used in a limited way within netflix.
 
