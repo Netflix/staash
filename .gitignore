@@ -72,6 +72,9 @@ staash-svc/src/main/resources/eureka-client.properties
 staash-svc/src/main/resources/paas.properties
 staash-svc/bin/cassandra-template.yaml
 staash-svc/src/main/resources/eureka-client.properties
+staash-eureka/bin/eureka-client.properties
+staash-eureka/src/main/resources/eureka-client.properties
+staash-jetty/out
 */target/*
 */build/*
 */lib/*
