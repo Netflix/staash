@@ -1,12 +1,14 @@
-package com.netflix.paas.rest.modules;
+package com.netflix.paas.rest.test;
 
 import java.net.URL;
 import java.util.Properties;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.netflix.astyanax.AstyanaxContext;
@@ -34,7 +36,7 @@ import com.netflix.paas.service.MetaService;
 import com.netflix.paas.service.PaasDataService;
 import com.netflix.paas.service.PaasMetaService;
 
-public class PaasPropertiesModule extends AbstractModule {
+public class TestPaasPropertiesModule extends AbstractModule {
     @Override
     protected void configure() {
         try {
@@ -47,7 +49,7 @@ public class PaasPropertiesModule extends AbstractModule {
 
     private static Properties loadProperties() throws Exception {
         Properties properties = new Properties();
-        ClassLoader loader = PaasPropertiesModule.class.getClassLoader();
+        ClassLoader loader = TestPaasPropertiesModule.class.getClassLoader();
         URL url = loader.getResource("paas.properties");
         properties.load(url.openStream());
         return properties;
@@ -67,7 +69,8 @@ public class PaasPropertiesModule extends AbstractModule {
     }
     @Provides
     @Named("astmetaks")
-    Keyspace provideKeyspace(@Named("paas.metacluster") String clustername,EurekaAstyanaxHostSupplier hs) {
+    @Singleton
+    Keyspace provideKeyspace(@Named("paas.metacluster") String clustername) {
         String clusterNameOnly = "";
         String clusterPortOnly = "";
         String[] clusterinfo = clustername.split(":");
@@ -78,6 +81,7 @@ public class PaasPropertiesModule extends AbstractModule {
             clusterNameOnly = clustername;
             clusterPortOnly = "9160";
         }
+//        hs = new EurekaAstyanaxHostSupplier();
         AstyanaxContext<Keyspace> keyspaceContext = new AstyanaxContext.Builder()
         .forCluster(clusterNameOnly)
         .forKeyspace("paasmetaks")
@@ -90,14 +94,14 @@ public class PaasPropertiesModule extends AbstractModule {
                         .setDiscoveryDelayInSeconds(60000)
                         .setTargetCassandraVersion("1.1")
                         .setCqlVersion("3.0.0"))
-                        .withHostSupplier(hs.getSupplier(clustername))
+//                        .withHostSupplier(hs.getSupplier(clustername))
         .withConnectionPoolConfiguration(
                 new ConnectionPoolConfigurationImpl(clusterNameOnly
                         + "_" + "paasmetaks")
                         .setSocketTimeout(3000)
                         .setMaxTimeoutWhenExhausted(2000)
-                        .setMaxConnsPerHost(3).setInitConnsPerHost(1))
-                        //.setSeeds(clusterNameOnly+":"+clusterPortOnly))
+                        .setMaxConnsPerHost(3).setInitConnsPerHost(1)
+                        .setSeeds(clusterNameOnly+":"+clusterPortOnly))  //uncomment for localhost
         .withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
         .buildKeyspace(ThriftFamilyFactory.getInstance());
         keyspaceContext.start();
@@ -112,6 +116,7 @@ public class PaasPropertiesModule extends AbstractModule {
         return cluster;
     }    
     @Provides
+    @Singleton
     MetaDao provideCqlMetaDao(@Named("paas.cassclient") String clientType, @Named("metacluster") Cluster cluster,@Named("astmetaks") Keyspace keyspace) {
         if (clientType.equals("cql"))
         return new CqlMetaDaoImpl(cluster );
@@ -128,6 +133,7 @@ public class PaasPropertiesModule extends AbstractModule {
     Cluster providePooledCluster(@Named("paas.cassclient") String clientType,@Named("paas.metacluster") String clustername) {
         if (clientType.equals("cql")) {
         Cluster cluster = Cluster.builder().withLoadBalancingPolicy(new TokenAwarePolicy(new RoundRobinPolicy())).addContactPoint(clustername).build();
+//        Cluster cluster = Cluster.builder().addContactPoint(clustername).build();
         return cluster;
         }else {
             return null;
@@ -135,6 +141,7 @@ public class PaasPropertiesModule extends AbstractModule {
     }
     @Provides
     @Named("newmetadao")
+    @Singleton
     MetaDao provideCqlMetaDaoNew(@Named("paas.cassclient") String clientType, @Named("metacluster") Cluster cluster, @Named("astmetaks") Keyspace keyspace) {
         if (clientType.equals("cql"))
         return new CqlMetaDaoImplNew(cluster );
@@ -155,7 +162,7 @@ public class PaasPropertiesModule extends AbstractModule {
         return new CacheService(metad);
     }
     @Provides
-    ConnectionFactory provideConnectionFactory(@Named("paas.cassclient") String clientType,EurekaAstyanaxHostSupplier hs) {
+    ConnectionFactory provideConnectionFactory(@Named("paas.cassclient") String clientType, EurekaAstyanaxHostSupplier hs) {
         return new PaasConnectionFactory(clientType, hs);
     }
 }

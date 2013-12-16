@@ -1,21 +1,3 @@
-/*******************************************************************************
- * /***
- *  *
- *  *  Copyright 2013 Netflix, Inc.
- *  *
- *  *     Licensed under the Apache License, Version 2.0 (the "License");
- *  *     you may not use this file except in compliance with the License.
- *  *     You may obtain a copy of the License at
- *  *
- *  *         http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  *     Unless required by applicable law or agreed to in writing, software
- *  *     distributed under the License is distributed on an "AS IS" BASIS,
- *  *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  *     See the License for the specific language governing permissions and
- *  *     limitations under the License.
- *  *
- ******************************************************************************/
 package com.netflix.paas.common.query;
 
 import java.sql.ResultSet;
@@ -113,20 +95,26 @@ public class QueryUtils {
         JsonObject resultMap = new JsonObject();
         int rcount = 1;
         for (com.netflix.astyanax.model.Row<String, String> row : rows) {
-            JsonObject rowobj = new JsonObject();
             ColumnList<String> columns = row.getColumns();
             Collection<String> colnames = columns.getColumnNames();
             String rowStr = "";
             String colStr = "";
-
-            for (String colname:colnames) {
-                colStr = colStr+colname+",";
-               value = columns.getStringValue(colname, null);
-               rowStr=rowStr+value+",";
+            if (colnames.contains("key") && colnames.contains("column1")) {
+            	colStr = colStr + columns.getDateValue("column1", null).toGMTString();
+            	rowStr = rowStr + columns.getStringValue("value", null); 
+            	response.putString(colStr, rowStr);
+            } else {
+                JsonObject rowObj = new JsonObject();
+	            for (String colName:colnames) {
+	                //colStr = colStr+colname+",";
+	               value = columns.getStringValue(colName, null);
+	               //rowStr=rowStr+value+",";
+	               rowObj.putString(colName, value);
+	            }
+	            //rowobj.putString("columns", colStr);
+	            //rowobj.putString("values", rowStr);
+	            response.putObject(""+rcount++, rowObj);
             }
-            rowobj.putString("columns", colStr);
-            rowobj.putString("values", rowStr);
-            response.putObject("row"+rcount++, rowobj);
         }
         return response.toString();
         

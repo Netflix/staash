@@ -1,33 +1,13 @@
-/*******************************************************************************
- * /***
- *  *
- *  *  Copyright 2013 Netflix, Inc.
- *  *
- *  *     Licensed under the Apache License, Version 2.0 (the "License");
- *  *     you may not use this file except in compliance with the License.
- *  *     You may obtain a copy of the License at
- *  *
- *  *         http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  *     Unless required by applicable law or agreed to in writing, software
- *  *     distributed under the License is distributed on an "AS IS" BASIS,
- *  *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  *     See the License for the specific language governing permissions and
- *  *     limitations under the License.
- *  *
- ******************************************************************************/
 package com.netflix.paas.connection;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.cassandra.utils.Hex;
+import org.apache.log4j.Logger;
+
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.name.Names;
 import com.netflix.astyanax.AstyanaxContext;
 import com.netflix.astyanax.Keyspace;
 import com.netflix.astyanax.connectionpool.NodeDiscoveryType;
@@ -39,18 +19,17 @@ import com.netflix.astyanax.connectionpool.impl.CountingConnectionPoolMonitor;
 import com.netflix.astyanax.cql.CqlStatementResult;
 import com.netflix.astyanax.impl.AstyanaxConfigurationImpl;
 import com.netflix.astyanax.thrift.ThriftFamilyFactory;
-import com.netflix.governator.guice.LifecycleInjector;
 import com.netflix.paas.cassandra.discovery.EurekaAstyanaxHostSupplier;
-import com.netflix.paas.cassandra.discovery.EurekaModule;
 import com.netflix.paas.common.query.QueryFactory;
 import com.netflix.paas.common.query.QueryType;
 import com.netflix.paas.common.query.QueryUtils;
 import com.netflix.paas.json.JsonObject;
+import com.netflix.paas.json.impl.Base64;
 import com.netflix.paas.model.StorageType;
-import com.netflix.paas.rest.util.HostSupplier;
 
 public class AstyanaxCassandraConnection implements PaasConnection{
     private Keyspace keyspace;
+    private static Logger logger = Logger.getLogger(AstyanaxCassandraConnection.class);
     public AstyanaxCassandraConnection(String cluster, String db,EurekaAstyanaxHostSupplier supplier) {
         this.keyspace = createAstyanaxKeyspace(cluster, db, supplier);
     }
@@ -116,12 +95,23 @@ public class AstyanaxCassandraConnection implements PaasConnection{
 
     public String insert(String db, String table, JsonObject payload) {
         // TODO Auto-generated method stub
-        String query = QueryFactory.BuildQuery(QueryType.INSERT, StorageType.CASSANDRA);
+    	
         try {
+        	if (payload.getString("type").equals("kv")) {
+//        		byte[] by_original = {0,1,2,3,4,5,6,7};
+        		String str = Hex.bytesToHex(payload.getBinary("value"));
+//				String stmt = "insert into "+db+"."+table+"(Key, column1, value)" +" values('"+payload.getString("key")+"' , '1','"+ str+"');";
+				String stmt = "insert into "+db+"."+table+"(key, value)" +" values('"+payload.getString("key")+"' , '"+ str+"');";
+        		keyspace.prepareCqlStatement().withCql(stmt).execute();
+        		
+        	} else {
+            String query = QueryFactory.BuildQuery(QueryType.INSERT, StorageType.CASSANDRA);
             keyspace.prepareCqlStatement().withCql(String.format(query, db+"."+table,payload.getString("columns"),payload.getValue("values"))).execute();
+        	}
         } catch (ConnectionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         return "{\"message\":\"ok\"}";
     }
@@ -151,9 +141,7 @@ public class AstyanaxCassandraConnection implements PaasConnection{
                               strategyMap)
                       .put("strategy_class", strategy).build());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
-            //keyspace exists
+              logger.info("DB Exists, Skipping");
         } 
           return "{\"message\":\"ok\"}";
     }
@@ -165,6 +153,7 @@ public class AstyanaxCassandraConnection implements PaasConnection{
         } catch (ConnectionException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
+        	logger.info("Table Exists, Skipping");
         }
         return "{\"message\":\"ok\"}";
     }
@@ -204,7 +193,7 @@ public class AstyanaxCassandraConnection implements PaasConnection{
             }
         } catch (Exception e) {
             // TODO: handle exception
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
         //return null;
     }
@@ -212,5 +201,9 @@ public class AstyanaxCassandraConnection implements PaasConnection{
         // TODO Auto-generated method stub
         return null;
     }
+	public void closeConnection() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

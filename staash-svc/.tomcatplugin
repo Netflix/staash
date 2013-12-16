@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomcatProjectProperties>
-    <rootDir>/target/paas-rest-0.0.1-SNAPSHOT</rootDir>
+    <rootDir>/target/staash-svc-1.0.0-SNAPSHOT</rootDir>
     <exportSource>false</exportSource>
     <reloadable>true</reloadable>
     <redirectLogger>false</redirectLogger>
     <updateXml>true</updateXml>
     <warLocation></warLocation>
     <extraInfo></extraInfo>
-    <webPath>/sarc</webPath>
+    <webPath>/staash</webPath>
 </tomcatProjectProperties>
