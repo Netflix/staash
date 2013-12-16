@@ -7,14 +7,14 @@ This is the first release of Staash and it is currently being used in a limited 
 
 Some features provided in Staash
 
-    o Highe level rest interface for cassandra.
-    o High level rest inteface for mysql.
-    o Ability to hide complexity behind relational concepts by modeling data in relational    terms.
+    o High level rest interface for cassandra.
+    o High level rest interface for mysql.
+    o Ability to hide complexity behind relational concepts by modeling data in relational terms.
     o Ability to create and define storage.
-    o Ability to create and list database,table,event-series(in development).
-    o Ability to read and write to a Cassandra storage w/o knowing connection information.
-    o Ablity to be able to join a dataset across storage systems.
-    o Ability to creat, read and write to a simple event-seris(in development).
-    o Ability to create read and write to a prefix event series(in development).
-    o Provide auto-sharding for temporal data for event-series
-    o simple rest apit for a k-v store(in progress)
+    o Ability to create and list databases, tables and event-series(in development).
+    o Ability to read and write to a Cassandra storage without knowing connection information.
+    o Ability to be able to join a dataset across storage systems.
+    o Ability to create, read and write to a simple event-series(in development).
+    o Ability to create, read and write to a prefix event series(in development).
+    o Provide auto-sharding for temporal data for event-series.
+    o Simple REST API for a key-value store(in progress).
