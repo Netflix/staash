@@ -67,14 +67,14 @@ atlassian-ide-plugin.xml
 #######################################
 .nbattrs
 
-staash-svc/bin/cassandra1.1-template.yaml
 staash-svc/src/main/resources/eureka-client.properties
 staash-svc/src/main/resources/paas.properties
-staash-svc/bin/cassandra-template.yaml
 staash-svc/src/main/resources/eureka-client.properties
 staash-eureka/bin/eureka-client.properties
 staash-eureka/src/main/resources/eureka-client.properties
 staash-jetty/out
+*/.classpath
+*/.project
 */target/*
 */build/*
 */lib/*
