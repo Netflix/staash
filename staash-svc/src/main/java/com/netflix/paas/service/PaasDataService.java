@@ -22,7 +22,6 @@ package com.netflix.paas.service;
 import java.util.concurrent.Executors;
 
 import org.apache.cassandra.utils.Hex;
-import org.mortbay.log.Log;
 
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -42,14 +41,10 @@ public class PaasDataService implements DataService{
     @Inject
     public PaasDataService(MetaService meta, ConnectionFactory fac){
         this.meta = meta;
-        //this.fac = new PaasConnectionFactory(CLIENTTYPE.ASTYANAX.getType());
         this.fac = fac;
     }
 
     public String writeRow(String db, String table, JsonObject rowObj) {
-        // TODO Auto-generated method stub
-        // JsonObject tbl = meta.runQuery(EntityType.TABLE, db+"."+table);
-        // JsonObject storageConf = meta.runQuery(EntityType.STORAGE.getId(), tbl.getString("storage")).get(tbl.getString("storage"));
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
         PaasConnection conn = fac.createConnection(storageConf, db);
         return conn.insert(db,table,rowObj);
@@ -62,9 +57,6 @@ public class PaasDataService implements DataService{
     }
 
     public String listRow(String db, String table, String keycol, String key) {
-        // TODO Auto-generated method stub
-//        JsonObject tbl = meta.runQuery(EntityType.TABLE, db+"."+table).get(db+"."+table);
-//        JsonObject storageConf = meta.runQuery(EntityType.STORAGE.getId(), tbl.getString("storage")).get(tbl.getString("storage"));
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
         if (storageConf == null) return "{\"msg\":\"the requested table does not exist in paas\"}";
         PaasConnection conn = fac.createConnection(storageConf,db);
@@ -81,18 +73,14 @@ public class PaasDataService implements DataService{
     }
 
     public String writeEvent(String db, String table, JsonObject rowObj) {
-        // TODO Auto-generated method stub
         JsonObject tbl = meta.runQuery(EntityType.SERIES, db+"."+table);
         if (tbl == null) throw new RuntimeException("Table "+table+" does not exist");
-//        JsonObject storageConf = meta.runQuery(EntityType.STORAGE.getId(), tbl.getString("storage")).get(tbl.getString("storage"));
-//        JsonObject storageConf = meta.getStorageForTable(db+"."+table);
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
         if (storageConf == null) throw new RuntimeException("Storage for  "+table+" does not exist");
         PaasConnection conn = fac.createConnection(storageConf,db);
         String periodicity = tbl.getString("periodicity");
         Long time = rowObj.getLong("timestamp");
         if (time == null || time <= 0) {
-        	Log.info("No timestamp specified! using current time");
         	time = System.currentTimeMillis();
         }
         String prefix = rowObj.getString("prefix");
