@@ -39,6 +39,7 @@ public class EurekaNodeDiscoveryTest {
     Logger LOG = LoggerFactory.getLogger(EurekaNodeDiscoveryTest.class);
 
     @Test
+    @Ignore
     public void testSupplier() {
         List<AbstractModule> modules = Lists.newArrayList(
                 new AbstractModule() {
