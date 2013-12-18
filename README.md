@@ -2,6 +2,7 @@ As the complexity of the data land-scape grows the application developers are le
 
 
 For more information http://github.com/Netflix/staash/wiki
+Link to the netflix tech blog http://techblog.netflix.com
 
 This is the first release of Staash and it is currently being used in a limited way within netflix.
 
