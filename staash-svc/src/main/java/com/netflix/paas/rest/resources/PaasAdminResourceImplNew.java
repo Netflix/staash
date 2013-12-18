@@ -17,7 +17,7 @@
  *  *
  *  *
  ******************************************************************************/
-package com.netflix.paas.rest.resource.refactored;
+package com.netflix.paas.rest.resources;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;

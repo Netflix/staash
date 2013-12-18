@@ -17,7 +17,7 @@
  *  *
  *  *
  ******************************************************************************/
-package com.netflix.paas.rest.resource.refactored;
+package com.netflix.paas.rest.resources;
 
 import java.io.File;
 import java.io.FileOutputStream;
