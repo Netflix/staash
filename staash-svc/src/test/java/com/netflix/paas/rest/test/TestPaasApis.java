@@ -2,8 +2,8 @@ package com.netflix.paas.rest.test;
 
 import org.junit.Test;
 
-import com.netflix.paas.json.JsonArray;
-import com.netflix.paas.json.JsonObject;
+import com.netflix.staash.json.JsonArray;
+import com.netflix.staash.json.JsonObject;
 
 public class TestPaasApis {
 	@Test

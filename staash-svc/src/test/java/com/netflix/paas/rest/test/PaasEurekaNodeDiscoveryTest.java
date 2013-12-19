@@ -33,8 +33,8 @@ import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.netflix.astyanax.connectionpool.Host;
 import com.netflix.governator.guice.LifecycleInjector;
-import com.netflix.paas.cassandra.discovery.EurekaAstyanaxHostSupplier;
-import com.netflix.paas.cassandra.discovery.EurekaModule;
+import com.netflix.staash.cassandra.discovery.EurekaAstyanaxHostSupplier;
+import com.netflix.staash.cassandra.discovery.EurekaModule;
 
 public class PaasEurekaNodeDiscoveryTest {
     Logger LOG = LoggerFactory.getLogger(PaasEurekaNodeDiscoveryTest.class);
