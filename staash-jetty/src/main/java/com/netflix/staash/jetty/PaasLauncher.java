@@ -16,7 +16,7 @@
  *  *     limitations under the License.
  *  *
  ******************************************************************************/
-package com.netflix.paas.jetty;
+package com.netflix.staash.jetty;
 
 import org.eclipse.jetty.server.Server;
 import com.google.inject.servlet.GuiceFilter;

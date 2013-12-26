@@ -16,37 +16,21 @@
  *  *     limitations under the License.
  *  *
  ******************************************************************************/
-package com.netflix.paas;
+package com.netflix.staash;
 
-import com.netflix.astyanax.test.EmbeddedCassandra;
+import java.net.URL;
 
-public class SingletonEmbeddedCassandra {
-    
-    private final EmbeddedCassandra         cassandra;
-    private static class Holder {
-        private final static SingletonEmbeddedCassandra instance = new SingletonEmbeddedCassandra();
+import org.junit.Test;
+
+public class TestClassLoader {
+    @Test
+    public void testLoader() {
+        String defaultConfigFileName1 = "config.properties";
+        String defaultConfigFileName2 = "/tmp/config.properties";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(defaultConfigFileName1);
+        URL url2 = loader.getResource(defaultConfigFileName1);
+        int i =0;
     }
-    
-    
-    public static SingletonEmbeddedCassandra getInstance() {
-        return Holder.instance;
-    }
-    
-    public SingletonEmbeddedCassandra() {
-        try {
-            cassandra = new EmbeddedCassandra();
-            cassandra.start();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to start embedded cassandra", e);
-        }
-    }
-    
-    public void finalize() {
-        try {
-            cassandra.stop();
-        }
-        catch (Exception e) {
-            
-        }
-    }
+
 }
