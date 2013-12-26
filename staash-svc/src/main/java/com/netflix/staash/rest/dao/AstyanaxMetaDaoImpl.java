@@ -45,57 +45,17 @@ import com.netflix.staash.rest.util.MetaConstants;
 import com.netflix.staash.rest.util.PaasUtils;
 
 public class AstyanaxMetaDaoImpl implements MetaDao{
-//    private AstyanaxContext<Keyspace> keyspaceContext;
     private Keyspace keyspace;
-//    private final String SEEDS = "localhost:9160";
-//    private final String TEST_CLUSTER_NAME = "test cluster";
-//    private final String TEST_KEYSPACE_NAME = "testpaasmetaks";
-    private static final long CASSANDRA_WAIT_TIME = 1000;
-//    List<String> dbHolder = new ArrayList<String>();
-//    Map<String, String> tableToStorageMap = new ConcurrentHashMap<String, String>();
-//    Map<String,JsonObject> storageMap = new ConcurrentHashMap<String,JsonObject>();
-//    Map<String, List<String>> dbToTableMap = new ConcurrentHashMap<String, List<String>>();
-//    Map<String, List<String>> dbToTimeseriesMap = new ConcurrentHashMap<String, List<String>>();
     static ColumnFamily<String, String> TEST_CF = ColumnFamily
             .newColumnFamily("metacf", StringSerializer.get(),
                     StringSerializer.get());
 
     @Inject
     public AstyanaxMetaDaoImpl(@Named("astmetaks") Keyspace keyspace) {
-//        keyspaceContext = new AstyanaxContext.Builder()
-//        .forCluster(TEST_CLUSTER_NAME)
-//        .forKeyspace(TEST_KEYSPACE_NAME)
-//        .withAstyanaxConfiguration(
-//                new AstyanaxConfigurationImpl()
-//                        .setDiscoveryType(
-//                                NodeDiscoveryType.RING_DESCRIBE)
-//                        .setConnectionPoolType(
-//                                ConnectionPoolType.TOKEN_AWARE)
-//                        .setDiscoveryDelayInSeconds(60000)
-//                        .setTargetCassandraVersion("1.2")
-//                        .setCqlVersion("3.0.0"))
-//        .withConnectionPoolConfiguration(
-//                new ConnectionPoolConfigurationImpl(TEST_CLUSTER_NAME
-//                        + "_" + TEST_KEYSPACE_NAME)
-//                        .setSocketTimeout(30000)
-//                        .setMaxTimeoutWhenExhausted(2000)
-//                        .setMaxConnsPerHost(10).setInitConnsPerHost(10)
-//                        .setSeeds(SEEDS))
-//        .withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
-//        .buildKeyspace(ThriftFamilyFactory.getInstance());
-//        keyspaceContext.start();
-//        keyspace = keyspaceContext.getClient();
         this.keyspace = keyspace;
         maybecreateschema();
     }
     private void maybecreateschema() {
-        try {
-            //keyspace.dropKeyspace();
-            //Thread.sleep(CASSANDRA_WAIT_TIME);
-        } catch (Exception e) {
-            //keyspace already exists
-        }
-
         try {
             keyspace.createKeyspace(ImmutableMap
                     .<String, Object> builder()
@@ -104,19 +64,13 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
                                     .put("us-east", "3").build())
                     .put("strategy_class", "NetworkTopologyStrategy").build());
         } catch (ConnectionException e) {
-            // TODO Auto-generated catch block
             //If we are here that means the meta artifacts already exist
         }
 
-//        try {
-////            Thread.sleep(CASSANDRA_WAIT_TIME);
-//        } catch (InterruptedException e) {
-//            // TODO Auto-generated catch block
-//            //e.printStackTrace();
-//        }
-        OperationResult<CqlStatementResult> result;
 
         try {
+            OperationResult<CqlStatementResult> result = null;
+
             String metaDynamic = "CREATE TABLE metacf (\n" + "    key text,\n"
                     + "    column1 text,\n" + "    value text,\n"
                     + "    PRIMARY KEY (key, column1)\n"
@@ -128,7 +82,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
                     .execute();
         } catch (ConnectionException e) {
             // TODO Auto-generated catch block
-            //if we are here means meta artifacts already exists
+            //if we are here means meta artifacts already exists, ignore
         }
     }
        /**
@@ -176,79 +130,6 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
         //addEntityToCache(entity.getRowKey(), entity);
         return "{\"msg\":\"ok\"}";
     }
-//    private void addEntityToCache(String rowkey, Entity entity) {
-//        switch (EntityType.valueOf(rowkey)) {
-//        case STORAGE:
-//            storageMap.put(entity.getName(), new JsonObject(entity.getPayLoad()));
-//            break;
-//        case DB:
-//            dbHolder.add(entity.getName());
-//            break;
-//        case TABLE:
-//            JsonObject payobject = new JsonObject(entity.getPayLoad());
-//            tableToStorageMap.put(entity.getName(), payobject.getString("storage"));
-//            String db = payobject.getString("db");
-//            List<String> tables = dbToTableMap.get(db);
-//            if (tables == null || tables.size() == 0) {
-//                tables = new ArrayList<String>();
-//                tables.add(entity.getName());
-//            } else {
-//                tables.add(entity.getName());
-//            }
-//            dbToTableMap.put(db, tables);
-//            break;
-//            
-//        case SERIES:
-//            JsonObject tsobject = new JsonObject(entity.getPayLoad());
-//            tableToStorageMap.put(entity.getName(), tsobject.getString("storage"));
-//            String dbname = tsobject.getString("db");
-//            List<String> alltables = dbToTableMap.get(dbname);
-//            if (alltables == null || alltables.size() == 0) {
-//                alltables = new ArrayList<String>();
-//                alltables.add(entity.getName());
-//            } else {
-//                alltables.add(entity.getName());
-//            }
-//            dbToTimeseriesMap.put(dbname, alltables);
-//            break;
-//        }
-//    }
-
-//    public Entity readMetaEntity(String rowKey) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public String writeRow(String db, String table, JsonObject rowObj) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public String listRow(String db, String table, String keycol, String key) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-
-//    public String listSchemas() {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public String listTablesInSchema(String schemaname) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public String listTimeseriesInSchema(String schemaname) {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-//
-//    public String listStorage() {
-//        // TODO Auto-generated method stub
-//        return null;
-//    }
-
     public Map<String, String> getStorageMap() {
         // TODO Auto-generated method stub
         return null;
@@ -267,7 +148,6 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
             }
             rs = keyspace.prepareCqlStatement().withCql(queryStr)
                     .execute();
-//            Assert.assertTrue(!rs.getResult().getRows(TEST_CF).isEmpty());
             for (Row<String, String> row : rs.getResult().getRows(TEST_CF)) {
 
                 ColumnList<String> columns = row.getColumns();
@@ -277,8 +157,8 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
                 resultMap.put(key1, new JsonObject(val1));
             }
         } catch (ConnectionException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
         
         

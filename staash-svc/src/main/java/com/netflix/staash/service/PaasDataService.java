@@ -92,7 +92,6 @@ public class PaasDataService implements DataService{
     }
 
     public String readEvent(String db, String table, String eventTime) {
-        // TODO Auto-generated method stub
         JsonObject tbl = meta.runQuery(EntityType.SERIES, db+"."+table);
         if (tbl == null) throw new RuntimeException("Table "+table+" does not exist");
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
@@ -105,7 +104,6 @@ public class PaasDataService implements DataService{
     }
     
     public String readEvent(String db, String table, String prefix,String eventTime) {
-        // TODO Auto-generated method stub
         JsonObject tbl = meta.runQuery(EntityType.SERIES, db+"."+table);
         if (tbl == null) throw new RuntimeException("Table "+table+" does not exist");
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
@@ -119,7 +117,6 @@ public class PaasDataService implements DataService{
     }
 
     public String readEvent(String db, String table, String prefix,String startTime, String endTime) {
-        // TODO Auto-generated method stub
         JsonObject tbl = meta.runQuery(EntityType.SERIES, db+"."+table);
         if (tbl == null) throw new RuntimeException("Table "+table+" does not exist");
         JsonObject storageConf = meta.getStorageForTable(db+"."+table);
@@ -142,7 +139,6 @@ public class PaasDataService implements DataService{
     }
     public String doJoin(String db, String table1, String table2,
             String joincol, String value) {
-        // TODO Auto-generated method stub
         String res1 = listRow(db,table1,joincol,value);
         String res2 = listRow(db,table2,joincol,value);
         return "{\""+table1+"\":"+res1+",\""+table2+"\":"+res2+"}"; 
@@ -150,7 +146,6 @@ public class PaasDataService implements DataService{
 
 	public byte[] fetchValueForKey(String db, String table, String keycol,
 			String key) {
-		// TODO Auto-generated method stub
 		JsonObject storageConf = meta.getStorageForTable(db+"."+table);
         if (storageConf == null) return "{\"msg\":\"the requested table does not exist in paas\"}".getBytes();
         PaasConnection conn = fac.createConnection(storageConf,db);
