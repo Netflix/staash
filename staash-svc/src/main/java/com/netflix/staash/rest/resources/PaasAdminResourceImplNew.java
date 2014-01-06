@@ -190,5 +190,4 @@ public class PaasAdminResourceImplNew {
     public String extendDB(String db, String region) {
         return metasvc.extenddb(db, region).toString();
     }
-
 }

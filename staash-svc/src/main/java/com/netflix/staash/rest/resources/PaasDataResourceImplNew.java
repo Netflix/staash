@@ -152,4 +152,45 @@ public class PaasDataResourceImplNew {
 		return value;
 
 	}
+	@POST
+	@Path("/kvstore")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_PLAIN)
+	public String storeFile(
+			@FormDataParam("value") InputStream uploadedInputStream,
+			@FormDataParam("value") FormDataContentDisposition fileDetail) {
+		writeToKVStore(uploadedInputStream, fileDetail.getFileName());
+		return "success";
+
+	}
+
+	private void writeToKVStore(InputStream uploadedInputStream,
+			String uploadedFileName) {
+
+		try {
+			String uploadedFileLocation = "/tmp/" + uploadedFileName;
+			OutputStream out = new FileOutputStream(new File(
+					uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+			byte[] fbytes = Files.toByteArray(new File(uploadedFileLocation));
+			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000000) {
+				throw new RuntimeException("File is too large to upload, max size supported is 2MB");
+			}
+			JsonObject obj = new JsonObject();
+			obj.putString("key", uploadedFileName);
+			obj.putBinary("value", fbytes);
+			datasvc.writeToKVStore("kvstore", "kvmap", obj);
+
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		} 
+	}
 }
