@@ -28,15 +28,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.netflix.staash.exception.StorageDoesNotExistException;
 import com.netflix.staash.json.JsonObject;
-import com.netflix.staash.rest.dao.MetaDao;
 import com.netflix.staash.rest.meta.entity.EntityType;
-import com.netflix.staash.rest.meta.entity.PaasDBEntity;
-import com.netflix.staash.rest.meta.entity.PaasStorageEntity;
-import com.netflix.staash.rest.meta.entity.PaasTableEntity;
-import com.netflix.staash.rest.meta.entity.PaasTimeseriesEntity;
 import com.netflix.staash.service.MetaService;
 
 @Path("/v1/admin")

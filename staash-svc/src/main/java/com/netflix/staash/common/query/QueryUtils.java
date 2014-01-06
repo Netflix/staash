@@ -111,7 +111,6 @@ public class QueryUtils {
                 .newColumnFamily(cfname, StringSerializer.get(),
                         StringSerializer.get());
         Rows<String, String> rows = rs.getRows(cf);
-        JsonObject resultMap = new JsonObject();
         int rcount = 1;
         for (com.netflix.astyanax.model.Row<String, String> row : rows) {
             ColumnList<String> columns = row.getColumns();

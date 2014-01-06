@@ -21,4 +21,9 @@ package com.netflix.staash.exception;
 
 public class TypeDoesNotMatchWithValueException extends PaasRuntimeException{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 }

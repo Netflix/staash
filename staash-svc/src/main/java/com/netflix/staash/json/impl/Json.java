@@ -29,7 +29,7 @@ import com.netflix.staash.json.EncodeException;
  */
 public class Json {
 
-  private static final Logger log = LoggerFactory.getLogger(Json.class);
+//  private static final Logger log = LoggerFactory.getLogger(Json.class);
 
   private final static ObjectMapper mapper = new ObjectMapper();
   private final static ObjectMapper prettyMapper = new ObjectMapper();

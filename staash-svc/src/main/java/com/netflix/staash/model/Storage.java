@@ -19,7 +19,6 @@
  ******************************************************************************/
 package com.netflix.staash.model;
 
-import java.util.List;
 
 public class Storage {
     String name;

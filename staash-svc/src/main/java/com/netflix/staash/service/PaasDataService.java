@@ -64,7 +64,6 @@ public class PaasDataService implements DataService{
     }
     public String writeEvents(String db, String table, JsonArray events) {
     	
-    	JsonObject msg = new JsonObject();
     		for (Object event: events) {
     			JsonObject obj = (JsonObject) event;
     			writeEvent(db, table, obj);

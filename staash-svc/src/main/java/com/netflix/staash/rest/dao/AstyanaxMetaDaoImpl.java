@@ -69,17 +69,17 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
 
 
         try {
-            OperationResult<CqlStatementResult> result = null;
+//            OperationResult<CqlStatementResult> result = null;
 
             String metaDynamic = "CREATE TABLE metacf (\n" + "    key text,\n"
                     + "    column1 text,\n" + "    value text,\n"
                     + "    PRIMARY KEY (key, column1)\n"
                     + ") WITH COMPACT STORAGE;";
-            result = keyspace
-                    .prepareCqlStatement()
-                    .withCql(
-                            metaDynamic)
-                    .execute();
+            keyspace
+            .prepareCqlStatement()
+            .withCql(
+                     metaDynamic)
+            .execute();
         } catch (ConnectionException e) {
             // TODO Auto-generated catch block
             //if we are here means meta artifacts already exists, ignore
@@ -112,9 +112,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao{
                 .build();
         pload.putString("db", db);
         metasvc.writeMetaEntity(pte);
-        Map<String,JsonObject> map1 = metasvc.runQuery(EntityType.DB.getId(), "astyanaxdb");
-        int i = 0;
-    }
+        }
     public String writeMetaEntity(Entity entity) {
         // TODO Auto-generated method stub
         try {

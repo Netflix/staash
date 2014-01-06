@@ -20,7 +20,6 @@
 package com.netflix.staash.rest.meta.entity;
 
 import com.netflix.staash.json.JsonObject;
-import com.netflix.staash.rest.meta.entity.PaasDBEntity.Builder;
 import com.netflix.staash.rest.util.MetaConstants;
 
 public class PaasStorageEntity extends Entity{

@@ -45,7 +45,7 @@ public class PaasDaoFactory {
     public  DataDao getDataDao(String storage, String clientType) {
         String storageType = getStorageType(storage);
         String cluster = getCluster(storage);
-        String hostName = getHostName(cluster);
+//        String hostName = getHostName(cluster);
         if (DaoMap.containsKey(cluster)) return DaoMap.get(cluster);
         if (storageType.equals("cassandra") &&  clientType.equals("cql")) {
             DataDao dataDao = DaoMap.get(cluster);

@@ -82,7 +82,6 @@ public class PaasMetaService implements MetaService {
                 PaasTimeseriesEntity ptse = PaasTimeseriesEntity.builder()
                         .withJsonPayLoad(new JsonObject(payload), tsschema)
                         .build();
-                JsonObject obj = new JsonObject(ptse.getPayLoad());                
                 createDBTable(ptse.getPayLoad());
                 String retseries =  meta.writeMetaEntity(ptse);
                 cache.addEntityToCache(EntityType.SERIES, ptse);
