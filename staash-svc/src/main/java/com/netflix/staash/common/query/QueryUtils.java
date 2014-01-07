@@ -24,7 +24,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.lang.RuntimeException;
 import com.datastax.driver.core.ColumnDefinitions;
 import com.datastax.driver.core.Row;
@@ -35,8 +34,6 @@ import com.netflix.astyanax.model.Rows;
 import com.netflix.astyanax.serializers.StringSerializer;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.model.StorageType;
-import com.netflix.staash.rest.util.Pair;
-import com.netflix.staash.storage.service.MySqlService;
 
 public class QueryUtils {
 

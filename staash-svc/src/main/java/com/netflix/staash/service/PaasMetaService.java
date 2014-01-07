@@ -19,19 +19,14 @@
  ******************************************************************************/
 package com.netflix.staash.service;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.netflix.staash.connection.ConnectionFactory;
 import com.netflix.staash.connection.PaasConnection;
-import com.netflix.staash.connection.PaasConnectionFactory;
 import com.netflix.staash.exception.StorageDoesNotExistException;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.dao.MetaDao;
-import com.netflix.staash.rest.meta.entity.Entity;
 import com.netflix.staash.rest.meta.entity.EntityType;
 import com.netflix.staash.rest.meta.entity.PaasDBEntity;
 import com.netflix.staash.rest.meta.entity.PaasStorageEntity;

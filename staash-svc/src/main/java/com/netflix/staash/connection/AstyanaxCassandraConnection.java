@@ -55,14 +55,14 @@ public class AstyanaxCassandraConnection implements PaasConnection{
     private Keyspace createAstyanaxKeyspace(String clustername, String db, EurekaAstyanaxHostSupplier supplier) {
         // TODO Auto-generated method stub
         String clusterNameOnly = "";
-        String clusterPortOnly = "";
+//        String clusterPortOnly = "";
         String[] clusterinfo = clustername.split(":");
         if (clusterinfo != null && clusterinfo.length == 2) {
             clusterNameOnly = clusterinfo[0];
-            clusterPortOnly = clusterinfo[1];
+//            clusterPortOnly = clusterinfo[1];
         } else {
             clusterNameOnly = clustername;
-            clusterPortOnly = "9160";
+//            clusterPortOnly = "9160";
         }
         
 //        List<AbstractModule> modules = Lists.newArrayList(

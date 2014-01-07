@@ -21,7 +21,6 @@ package com.netflix.staash.rest.meta.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.util.MetaConstants;
 import com.netflix.staash.rest.util.Pair;

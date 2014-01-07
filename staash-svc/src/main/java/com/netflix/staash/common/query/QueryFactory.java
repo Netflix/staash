@@ -19,11 +19,7 @@
  ******************************************************************************/
 package com.netflix.staash.common.query;
 
-import java.util.List;
-
 import com.netflix.staash.model.StorageType;
-import com.netflix.staash.rest.meta.entity.PaasTableEntity;
-import com.netflix.staash.rest.util.Pair;
 
 public class QueryFactory {
     public static final String INSERT_FORMAT = "INSERT INTO %s(%s) VALUES (%s)";
