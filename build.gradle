@@ -62,6 +62,24 @@ project(':staash-core') {
         testCompile 'junit:junit:4.11'
     }
 }
+project(':staash-astyanax') {
+	apply plugin: 'java'
+	dependencies {
+		compile     "com.netflix.astyanax:astyanax-core:$astyanax_version"
+		compile     "com.netflix.astyanax:astyanax-thrift:$astyanax_version"
+		compile     "com.netflix.astyanax:astyanax-cassandra:$astyanax_version"
+		compile     "com.netflix.astyanax:astyanax-entity-mapper:$astyanax_version"
+		compile     project(':staash-core')
+		testCompile 'junit:junit:4.11'
+	}
+}
+project(':staash-eureka') {
+	apply plugin: 'java'
+	dependencies {
+		compile     project(':staash-core')
+		compile     project(':staash-astyanax')
+	}
+}
 
 project(':staash-jetty') {
     apply plugin: 'java'
@@ -76,26 +94,6 @@ project(':staash-jetty') {
     }
 }
 
-project(':staash-astyanax') {
-    apply plugin: 'java'
-    dependencies {
-        compile     "com.netflix.astyanax:astyanax-core:$astyanax_version"
-        compile     "com.netflix.astyanax:astyanax-thrift:$astyanax_version"
-        compile     "com.netflix.astyanax:astyanax-cassandra:$astyanax_version"
-        compile     "com.netflix.astyanax:astyanax-entity-mapper:$astyanax_version"
-        compile     project(':staash-core')
-        testCompile 'junit:junit:4.11'
-    }
-}
-
-
-project(':staash-eureka') {
-    apply plugin: 'java'
-    dependencies {
-        compile     project(':staash-core')
-        compile     project(':staash-astyanax')
-    }
-}
 
 project(':staash-mesh') {
     apply plugin: 'java'
@@ -113,12 +111,29 @@ project(':staash-svc') {
         compile     'javax.servlet:servlet-api:2.5'
         compile     'org.eclipse.jetty:jetty-servlet:7.6.7.v20120910'
         //provided    'org.glassfish.jersey.media:jersey-media-multipart:2.2'
-	compile     project(':staash-core')
+	     compile     project(':staash-core')
         compile     project(':staash-astyanax')
         compile     project(':staash-eureka')
         testCompile 'junit:junit:4.11'
     }
-    //war {
-    //}
+}
+project(':staash-tomcat') {
+	apply plugin: 'java'
+	dependencies {
+		compile     'javax.servlet:servlet-api:2.5'
+		compile     'com.sun.jersey:jersey-server:1.9.1'
+		//compile		'org.apache.tomcat:tomcat-catalina:7.0.16'
+		compile		'org.apache.tomcat:catalina:6.0.18'
+		//compile      'tomcat:tomcat-util:7.0.16'
+		//compile      'org.apache.tomcat:tomcat-coyote:7.0.27'
+		compile      'org.apache.tomcat:coyote:6.0.18'
+		compile      'org.apache.tomcat:jasper:6.0.18'
+		
+		//compile     project(':staash-core')
+		//compile     project(':staash-astyanax')
+		//compile     project(':staash-eureka')
+		//compile 	project(':staash-svc')
+		testCompile 'junit:junit:4.11'
+	}
 }
 

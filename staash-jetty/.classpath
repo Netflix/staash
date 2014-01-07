@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src/conf"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry exported="true" kind="src" path="/paas-astyanax"/>
-	<classpathentry exported="true" kind="src" path="/paas-core"/>
-	<classpathentry exported="true" kind="src" path="/paas-eureka"/>
+	<classpathentry exported="true" kind="src" path="/staash-astyanax"/>
+	<classpathentry exported="true" kind="src" path="/staash-core"/>
+	<classpathentry exported="true" kind="src" path="/staash-eureka"/>
 	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
 	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

@@ -1,0 +1,52 @@
+POST /v1/admin
+Payload:
+{
+   "name":"subsdb",
+    "cluster":"cass_ccs"
+}
+
+{
+   "name":"subscribersdb",
+   "cluster":"cass_sandbox"
+}
+
+POST /v1/admin/{subsdb}
+Payload:
+{
+   "name":"substable",
+   "columns":"col1,col2,col3:int,col4",
+   "primary":"col1"
+}
+{
+   "name":"subscribers",
+   "columns":"email,last,first,startdata,stopdate,methodofpayment",
+   "primarykey":"email"
+}
+
+POST /v1/data/{subsdb}/{substable}
+{
+     "row":"row1"
+     "columns": {
+		"col1":"val1"
+        "col2":"val2"
+ 		"col3":"val3"
+		}
+}
+
+{
+     "rowval":["colval1","colval2","colval3"]
+}
+
+Response:
+{
+  "status":"ok"
+}
+
+Response:
+{
+  "status":"error"
+   "message":"error message"
+}
+
+
+

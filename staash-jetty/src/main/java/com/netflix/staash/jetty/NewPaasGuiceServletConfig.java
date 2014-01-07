@@ -22,8 +22,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.netflix.governator.guice.LifecycleInjector;
-import com.netflix.staash.cassandra.MetaCassandraBootstrap;
-import com.netflix.staash.cassandra.MetaModule;
+import com.netflix.paas.cassandra.MetaCassandraBootstrap;
+import com.netflix.paas.cassandra.MetaModule;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
