@@ -1,2 +1,2 @@
 rootProject.name='staash'
-include 'staash-core','staash-jetty','staash-astyanax','staash-eureka', 'staash-mesh', 'staash-svc', 'staash-tomcat'
+include 'staash-core','staash-jetty','staash-astyanax','staash-eureka', 'staash-mesh', 'staash-svc', 'staash-tomcat', 'staash-web'

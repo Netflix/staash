@@ -34,9 +34,7 @@ public class EurekaModule extends AbstractModule {
     protected void configure() {
         LOG.info("Configuring EurekaModule");
         
-        // Initialize eureka
-        // TODO: Move this to a bootstrap thingy
-        DiscoveryManager.getInstance().initComponent(
+                DiscoveryManager.getInstance().initComponent(
                 new CloudInstanceConfig(),
                 new DefaultEurekaClientConfig());
 

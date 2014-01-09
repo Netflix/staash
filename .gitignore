@@ -69,10 +69,12 @@ atlassian-ide-plugin.xml
 
 staash-svc/src/main/resources/eureka-client.properties
 staash-svc/src/main/resources/paas.properties
-staash-svc/src/main/resources/eureka-client.properties
 staash-eureka/bin/eureka-client.properties
 staash-eureka/src/main/resources/eureka-client.properties
 staash-jetty/out
+staash-web/src/main/resources/eureka-client.properties
+staash-web/src/main/resources/paas.properties
+staash-web/src/main/
 */.classpath
 */.project
 */target/*
