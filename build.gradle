@@ -117,11 +117,11 @@ project(':staash-svc') {
         testCompile 'junit:junit:4.11'
     }
 }
-project(':staash-tomcat') {
-	apply plugin: 'java'
-	dependencies {
-		compile     'javax.servlet:servlet-api:2.5'
-		compile     'com.sun.jersey:jersey-server:1.9.1'		
+//project(':staash-tomcat') {
+	//apply plugin: 'java'
+	//dependencies {
+		//compile     'javax.servlet:servlet-api:2.5'
+		//compile     'com.sun.jersey:jersey-server:1.9.1'		
 		//compile		'org.apache.tomcat:tomcat-catalina:7.0.0'
 		//compile     'org.apache.tomcat.embed:tomcat-embed-core:7.0.0'
 		//compile      'org.apache.tomcat:jasper:7.0.0'
@@ -129,17 +129,17 @@ project(':staash-tomcat') {
 		//compile      'tomcat:tomcat-util:7.0.16'
 		//compile      'org.apache.tomcat:tomcat-coyote:7.0.27'
 		
-		compile		'org.apache.tomcat:catalina:6.0.18'
-		compile      'org.apache.tomcat:coyote:6.0.18'
-		compile      'org.apache.tomcat:jasper:6.0.18'
+		//compile		'org.apache.tomcat:catalina:6.0.18'
+		//compile      'org.apache.tomcat:coyote:6.0.18'
+		//compile      'org.apache.tomcat:jasper:6.0.18'
 		
 		//compile     project(':staash-core')
 		//compile     project(':staash-astyanax')
 		//compile     project(':staash-eureka')
 		//compile 	project(':staash-svc')
-		testCompile 'junit:junit:4.11'
-	}
-}
+		//testCompile 'junit:junit:4.11'
+	//}
+//}
 
 project(':staash-web') {
 	apply plugin: 'war'
