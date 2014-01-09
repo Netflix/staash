@@ -18,12 +18,8 @@
  ******************************************************************************/
 package com.netflix.staash;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map.Entry;
-import org.apache.commons.lang.StringUtils;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,41 +29,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.google.inject.Binding;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
 import com.google.inject.name.Names;
 import com.netflix.astyanax.connectionpool.Host;
 import com.netflix.governator.guice.LifecycleInjector;
-import com.netflix.governator.guice.LifecycleInjectorBuilder;
-import com.netflix.governator.lifecycle.LifecycleManager;
-import com.sun.jersey.guice.JerseyServletModule;
-import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import com.netflix.staash.cassandra.CassandraPaasModule;
-import com.netflix.staash.cassandra.PaasCassandraBootstrap;
-import com.netflix.staash.cassandra.admin.CassandraSystemAdminResource;
-import com.netflix.staash.cassandra.discovery.ClusterDiscoveryService;
-import com.netflix.staash.cassandra.discovery.EurekaAstyanaxHostSupplier;
-import com.netflix.staash.cassandra.discovery.EurekaModule;
-import com.netflix.staash.cassandra.entity.CassandraClusterEntity;
-import com.netflix.staash.cassandra.entity.ColumnFamilyEntity;
-import com.netflix.staash.cassandra.entity.KeyspaceEntity;
-import com.netflix.staash.cassandra.tasks.ClusterDiscoveryTask;
-import com.netflix.staash.dao.Dao;
-import com.netflix.staash.dao.DaoProvider;
-import com.netflix.staash.dao.DaoSchema;
-import com.netflix.staash.dao.astyanax.*;
-import com.netflix.staash.entity.DbEntity;
-import com.netflix.staash.entity.PassGroupConfigEntity;
-import com.netflix.staash.entity.TableEntity;
-import com.netflix.staash.resources.DataResource;
-import com.netflix.staash.resources.DbDataResource;
-import com.netflix.staash.resources.TableDataResource;
-import com.netflix.staash.service.SchemaService;
-import com.netflix.staash.tasks.InlineTaskManager;
-import com.netflix.staash.tasks.TaskManager;
+import com.netflix.paas.cassandra.discovery.EurekaAstyanaxHostSupplier;
+import com.netflix.paas.cassandra.discovery.EurekaModule;
 
 public class TestSchemaData {
     private static final Logger LOG = LoggerFactory.getLogger(TestSchemaData.class);

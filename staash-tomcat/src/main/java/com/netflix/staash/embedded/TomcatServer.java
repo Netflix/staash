@@ -101,17 +101,10 @@ public class TomcatServer {
     public boolean isRunning() {
         return isRunning;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
     	TomcatServer tomcat = new TomcatServer("staash", 8080, "/Users/ssingh/NflxOss/staash/staash-tomcat/src/main/webapps/staash4", true);
-    	try {
 			tomcat.start();
 			Thread.sleep(1000000);
-		} catch (LifecycleException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     }
 }
