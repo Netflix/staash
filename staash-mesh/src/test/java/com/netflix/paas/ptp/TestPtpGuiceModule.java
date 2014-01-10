@@ -19,13 +19,13 @@
 package com.netflix.paas.ptp;
 
 import com.google.inject.AbstractModule;
-import com.netflix.paas.mesh.InstanceRegistry;
-import com.netflix.paas.mesh.client.ClientFactory;
-import com.netflix.paas.mesh.client.memory.MemoryClientFactory;
-import com.netflix.paas.mesh.db.TopicRegistry;
-import com.netflix.paas.mesh.endpoints.ChordEndpointPolicy;
-import com.netflix.paas.mesh.endpoints.EndpointPolicy;
-import com.netflix.paas.mesh.seed.TopicSeed;
+import com.netflix.staash.mesh.InstanceRegistry;
+import com.netflix.staash.mesh.client.ClientFactory;
+import com.netflix.staash.mesh.client.memory.MemoryClientFactory;
+import com.netflix.staash.mesh.db.TopicRegistry;
+import com.netflix.staash.mesh.endpoints.ChordEndpointPolicy;
+import com.netflix.staash.mesh.endpoints.EndpointPolicy;
+import com.netflix.staash.mesh.seed.TopicSeed;
 
 public class TestPtpGuiceModule extends AbstractModule {
     @Override

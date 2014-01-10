@@ -22,13 +22,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.netflix.paas.mesh.InstanceInfo;
-import com.netflix.paas.mesh.InstanceRegistry;
-import com.netflix.paas.mesh.client.ClientFactory;
-import com.netflix.paas.mesh.endpoints.EndpointPolicy;
-import com.netflix.paas.mesh.server.MemoryServer;
-import com.netflix.paas.mesh.server.Server;
-import com.netflix.paas.mesh.server.ServerFactory;
+import com.netflix.staash.mesh.InstanceInfo;
+import com.netflix.staash.mesh.InstanceRegistry;
+import com.netflix.staash.mesh.client.ClientFactory;
+import com.netflix.staash.mesh.endpoints.EndpointPolicy;
+import com.netflix.staash.mesh.server.MemoryServer;
+import com.netflix.staash.mesh.server.Server;
+import com.netflix.staash.mesh.server.ServerFactory;
 
 public class RandomServerProvider implements ServerFactory {
     private final InstanceRegistry instanceRegistry;

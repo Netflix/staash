@@ -8,12 +8,9 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.netflix.staash.cassandra.discovery.EurekaModule;
-import com.netflix.staash.connection.ConnectionFactory;
 import com.netflix.staash.exception.StorageDoesNotExistException;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.meta.entity.EntityType;
-import com.netflix.staash.rest.modules.PaasPropertiesModule;
-import com.netflix.staash.service.DataService;
 import com.netflix.staash.service.PaasDataService;
 import com.netflix.staash.service.PaasMetaService;
 

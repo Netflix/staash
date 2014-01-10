@@ -23,15 +23,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.netflix.paas.mesh.InstanceRegistry;
-import com.netflix.paas.mesh.client.ClientFactory;
-import com.netflix.paas.mesh.client.memory.MemoryClientFactory;
-import com.netflix.paas.mesh.db.Entry;
-import com.netflix.paas.mesh.db.TopicRegistry;
-import com.netflix.paas.mesh.db.memory.MemoryTopicFactory;
-import com.netflix.paas.mesh.endpoints.ChordEndpointPolicy;
-import com.netflix.paas.mesh.endpoints.EndpointPolicy;
-import com.netflix.paas.mesh.server.Server;
+import com.netflix.staash.mesh.InstanceRegistry;
+import com.netflix.staash.mesh.client.ClientFactory;
+import com.netflix.staash.mesh.client.memory.MemoryClientFactory;
+import com.netflix.staash.mesh.db.Entry;
+import com.netflix.staash.mesh.db.TopicRegistry;
+import com.netflix.staash.mesh.db.memory.MemoryTopicFactory;
+import com.netflix.staash.mesh.endpoints.ChordEndpointPolicy;
+import com.netflix.staash.mesh.endpoints.EndpointPolicy;
+import com.netflix.staash.mesh.server.Server;
 
 public class TestDriver {
 

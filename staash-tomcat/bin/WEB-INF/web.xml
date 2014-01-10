@@ -25,7 +25,7 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping> -->
 	<listener>
-		<listener-class>com.netflix.paas.rest.tomcat.GuiceServletConfig</listener-class>
+		<listener-class>com.netflix.staash.web.GuiceServletConfig</listener-class>
 	</listener>
 
 	<filter>

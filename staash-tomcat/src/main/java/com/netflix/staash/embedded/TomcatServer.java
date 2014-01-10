@@ -33,7 +33,7 @@ public class TomcatServer {
         Host localHost = tomcat.createHost("localhost", appBase);
         localHost.setAutoDeploy(false);
 
-        StandardContext rootContext = (StandardContext) tomcat.createContext(contextPath, "/Users/ssingh/NflxOss/staash/staash-tomcat/src/main/webapps/staash4");
+        StandardContext rootContext = (StandardContext) tomcat.createContext(contextPath, "webapp");
         rootContext.setDefaultWebXml("web.xml");
         localHost.addChild(rootContext);
 
@@ -102,7 +102,7 @@ public class TomcatServer {
         return isRunning;
     }
     public static void main(String[] args) throws Exception{
-    	TomcatServer tomcat = new TomcatServer("staash", 8080, "/Users/ssingh/NflxOss/staash/staash-tomcat/src/main/webapps/staash4", true);
+    	TomcatServer tomcat = new TomcatServer("staash.war", 8080, "src/main", true);
 			tomcat.start();
 			Thread.sleep(1000000);
 			// TODO Auto-generated catch block

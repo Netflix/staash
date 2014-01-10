@@ -18,10 +18,10 @@
  ******************************************************************************/
 package com.netflix.paas.ptp;
 
-import com.netflix.paas.mesh.db.Entry;
-import com.netflix.paas.mesh.db.TopicRegistry;
-import com.netflix.paas.mesh.db.memory.MemoryTopicFactory;
-import com.netflix.paas.mesh.seed.TopicSeed;
+import com.netflix.staash.mesh.db.Entry;
+import com.netflix.staash.mesh.db.TopicRegistry;
+import com.netflix.staash.mesh.db.memory.MemoryTopicFactory;
+import com.netflix.staash.mesh.seed.TopicSeed;
 
 public class DummyTopicSeed implements TopicSeed {
     private static final String TOPIC_NAME = "test";

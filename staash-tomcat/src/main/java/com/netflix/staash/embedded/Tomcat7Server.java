@@ -2,11 +2,10 @@ package com.netflix.staash.embedded;
 
 import org.apache.catalina.core.AprLifecycleListener;
 import org.apache.catalina.core.StandardServer;
-//import org.apache.catalina.startup.Tomcat;
 
 public class Tomcat7Server {
 //	 public static void main(String[] args) throws Exception {
-//   	  String appBase = "/Users/ssingh/NflxOss/staash/staash-tomcat/src/main/webapps/staash4";
+//   	  String appBase = "src/main";
 //   	  Integer port = 8080;
 //
 //   	  Tomcat tomcat = new Tomcat();
