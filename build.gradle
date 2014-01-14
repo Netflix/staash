@@ -143,10 +143,13 @@ project(':staash-tomcat') {
 
 project(':staash-web') {
 	apply plugin: 'war'
+	apply plugin:   'java'
 	dependencies {
 		compile     'javax.servlet:servlet-api:2.5'
 		compile     'com.sun.jersey:jersey-server:1.9.1'
 		compile 	project(':staash-svc')
+		compile     'junit:junit:4.11'
+		compile     'org.apache.cassandra:cassandra-all:1.2.3'
 	}
 }
 
