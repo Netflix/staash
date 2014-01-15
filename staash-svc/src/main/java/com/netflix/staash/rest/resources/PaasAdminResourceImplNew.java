@@ -88,12 +88,9 @@ public class PaasAdminResourceImplNew {
     public String createSchema(String payLoad) {
         // TODO Auto-generated method stub
         if (payLoad!=null) {
-//            JsonObject jsonPayLoad =  new JsonObject(payLoad);
-//            PaasDBEntity pdbe = PaasDBEntity.builder().withJsonPayLoad(jsonPayLoad).build();
             try {
                 return metasvc.writeMetaEntity(EntityType.DB, payLoad);
             } catch (StorageDoesNotExistException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -107,8 +104,6 @@ public class PaasAdminResourceImplNew {
     public String createStorage(String payload) {
         // TODO Auto-generated method stub
         if (payload!=null) {
-//            JsonObject jsonPayLoad =  new JsonObject(payLoad);
-//            PaasStorageEntity pse = PaasStorageEntity.builder().withJsonPayLoad(jsonPayLoad).build();
             try {
                 return metasvc.writeMetaEntity(EntityType.STORAGE, payload);
             } catch (StorageDoesNotExistException e) {
@@ -137,17 +132,11 @@ public class PaasAdminResourceImplNew {
         JsonObject obj;
         try {
             if (payload!=null) {
-//            JsonObject jsonPayLoad =  new JsonObject(payLoad);
-//            PaasTableEntity ptbe = PaasTableEntity.builder().withJsonPayLoad(jsonPayLoad, schemaName).build();
                 obj = new JsonObject(payload).putString("db", schemaName);
                 return metasvc.writeMetaEntity(EntityType.TABLE, obj.toString());
-                //create new ks
-                //create new cf
             }
             obj = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
         } catch (StorageDoesNotExistException e) {
-            // TODO Auto-generated catch block
-           // e.printStackTrace();
             obj = new JsonObject("\"message\":\"Storage Does Not Exist\""); 
         }
         return obj.toString();
@@ -162,16 +151,10 @@ public class PaasAdminResourceImplNew {
         JsonObject obj;
         try {
             if (payload!=null) {
-//            JsonObject jsonPayLoad =  new JsonObject(payLoad);
-//            PaasTimeseriesEntity ptbe = PaasTimeseriesEntity.builder().withJsonPayLoad(jsonPayLoad, schemaName).build();
                 return metasvc.writeMetaEntity(EntityType.SERIES, payload);
-                //create new ks
-                //create new cf
             }
             obj = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
         } catch (StorageDoesNotExistException e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
             obj = new JsonObject("\"message\":\"Storage Does Not Exist\"");
         }
         return obj.toString();

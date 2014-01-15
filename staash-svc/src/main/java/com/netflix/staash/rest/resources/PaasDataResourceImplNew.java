@@ -181,7 +181,7 @@ public class PaasDataResourceImplNew {
 			out.flush();
 			out.close();
 			byte[] fbytes = Files.toByteArray(new File(uploadedFileLocation));
-			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000000) {
+			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000) {
 				throw new RuntimeException("File is too large to upload, max size supported is 2MB");
 			}
 			JsonObject obj = new JsonObject();

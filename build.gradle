@@ -114,6 +114,7 @@ project(':staash-svc') {
 	     compile     project(':staash-core')
         compile     project(':staash-astyanax')
         compile     project(':staash-eureka')
+		compile    "com.netflix.astyanax:astyanax-recipes:$astyanax_version"
         testCompile 'junit:junit:4.11'
     }
 }

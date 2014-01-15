@@ -20,16 +20,11 @@
 package com.netflix.staash.service;
 
 import java.util.concurrent.Executors;
-
-import org.apache.cassandra.utils.Hex;
-
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.inject.Inject;
-import com.netflix.staash.cassandra.discovery.EurekaAstyanaxHostSupplier;
 import com.netflix.staash.connection.ConnectionFactory;
 import com.netflix.staash.connection.PaasConnection;
-import com.netflix.staash.connection.PaasConnectionFactory;
 import com.netflix.staash.json.JsonArray;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.meta.entity.EntityType;

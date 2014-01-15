@@ -48,11 +48,9 @@ public class PaasConnectionFactory implements ConnectionFactory{
                         .getConnection(mysqlStorageConf.getJdbcurl(),mysqlStorageConf.getUser(), mysqlStorageConf.getPassword());
                 return new MySqlConnection(connection);
             } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 throw new RuntimeException(e);
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
