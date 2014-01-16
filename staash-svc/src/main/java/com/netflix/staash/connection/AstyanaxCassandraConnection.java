@@ -134,7 +134,7 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 				.withConcurrencyLevel(8)
 				.withMaxWaitTime(10)
 				.call();
-		if (meta!=null || meta.getObjectSize()<=0)
+		if (meta!=null && meta.getObjectSize()<=0)
 			throw new RuntimeException("Object does not exist");
 		return "{\"msg\":\"ok\"}";
 	}
