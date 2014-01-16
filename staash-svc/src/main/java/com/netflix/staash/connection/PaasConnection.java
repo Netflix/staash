@@ -30,5 +30,5 @@ public interface PaasConnection {
     public String createTable(JsonObject payload);
     public void closeConnection();
     public OutputStream readChunked(String db, String table, String objectName) throws Exception;
-    public String writeChunked(String db, String table, InputStream is) throws Exception;
+    public String writeChunked(String db, String table, String objectName, InputStream is) throws Exception;
 }

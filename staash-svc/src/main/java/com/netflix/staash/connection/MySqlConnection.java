@@ -104,7 +104,7 @@ public class MySqlConnection implements PaasConnection{
 	public OutputStream readChunked(String db, String table, String objectName) throws Exception{
 		return null;
 	}
-	public String writeChunked(String db, String table, InputStream is) throws Exception {
+	public String writeChunked(String db, String table, String objectName, InputStream is) throws Exception {
 		return null;
 	}
  }

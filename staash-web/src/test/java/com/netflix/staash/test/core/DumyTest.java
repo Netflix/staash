@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.cassandra.config.CFMetaData;
 import org.apache.cassandra.config.KSMetaData;
 import org.apache.cassandra.config.Schema;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class DumyTest {
     @Test
+    @Ignore
     public void mytest2() {
         System.out.println("Hello World!");
         for (String ks :Schema.instance.getTables()) {

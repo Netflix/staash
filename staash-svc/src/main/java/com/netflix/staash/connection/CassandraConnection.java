@@ -77,7 +77,7 @@ public class CassandraConnection implements PaasConnection{
 			throws Exception {
 		return null;
 	}
-	public String writeChunked(String db, String table, InputStream is)
+	public String writeChunked(String db, String table, String objectName, InputStream is)
 			throws Exception {
 		return null;
 	}

@@ -2,6 +2,7 @@ package com.netflix.staash.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.netflix.astyanax.AstyanaxContext;
@@ -45,6 +46,7 @@ public class TestChunking {
 	}
 
 	@Test
+	@Ignore
 	public void chunktest() {
 		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
 				keyspace, "chunks");
