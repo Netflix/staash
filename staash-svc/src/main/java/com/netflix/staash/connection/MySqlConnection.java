@@ -19,6 +19,7 @@
  ******************************************************************************/
 package com.netflix.staash.connection;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -101,10 +102,10 @@ public class MySqlConnection implements PaasConnection{
 				throw new RuntimeException(e.getMessage());
 			}
    	}
-	public OutputStream readChunked(String db, String table, String objectName) throws Exception{
+	public ByteArrayOutputStream readChunked(String db, String table, String objectName) {
 		return null;
 	}
-	public String writeChunked(String db, String table, String objectName, InputStream is) throws Exception {
+	public String writeChunked(String db, String table, String objectName, InputStream is) {
 		return null;
 	}
  }

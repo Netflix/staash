@@ -19,8 +19,8 @@
  ******************************************************************************/
 package com.netflix.staash.connection;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import com.netflix.staash.json.JsonObject;
 
 public interface PaasConnection {
@@ -29,6 +29,6 @@ public interface PaasConnection {
     public String createDB(String dbname);
     public String createTable(JsonObject payload);
     public void closeConnection();
-    public OutputStream readChunked(String db, String table, String objectName) throws Exception;
-    public String writeChunked(String db, String table, String objectName, InputStream is) throws Exception;
+    public ByteArrayOutputStream readChunked(String db, String table, String objectName);
+    public String writeChunked(String db, String table, String objectName, InputStream is);
 }

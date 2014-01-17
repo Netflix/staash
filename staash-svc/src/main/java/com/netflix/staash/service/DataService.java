@@ -19,10 +19,9 @@
  ******************************************************************************/
 package com.netflix.staash.service;
 
-import com.google.inject.Inject;
+import java.io.InputStream;
 import com.netflix.staash.json.JsonArray;
 import com.netflix.staash.json.JsonObject;
-import com.netflix.staash.rest.dao.MetaDao;
 
 public interface DataService {
     public String writeRow(String db, String table, JsonObject rowObj);
@@ -37,4 +36,6 @@ public interface DataService {
     public String writeToKVStore(String db, String table, JsonObject obj);
 	public byte[] fetchValueForKey(String db, String table,
 			String keycol, String key);
+	public byte[] readChunked(String db, String table, String objectName);
+    public String writeChunked(String db, String table, String objectName, InputStream is);
 }

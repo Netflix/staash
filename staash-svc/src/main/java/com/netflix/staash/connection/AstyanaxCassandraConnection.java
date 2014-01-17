@@ -99,11 +99,11 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 
 		try {
 			if (payload.getString("type").equals("kv")) {
-				 String str = Hex.bytesToHex(payload.getBinary("value"));
-				 String stmt = "insert into " + db + "." + table
-				 + "(key, value)" + " values('"
-				 + payload.getString("key") + "' , '" + str + "');";
-				 keyspace.prepareCqlStatement().withCql(stmt).execute();
+				String str = Hex.bytesToHex(payload.getBinary("value"));
+				String stmt = "insert into " + db + "." + table
+						+ "(key, value)" + " values('"
+						+ payload.getString("key") + "' , '" + str + "');";
+				keyspace.prepareCqlStatement().withCql(stmt).execute();
 			} else {
 				String query = QueryFactory.BuildQuery(QueryType.INSERT,
 						StorageType.CASSANDRA);
@@ -123,35 +123,40 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 		return "{\"message\":\"ok\"}";
 	}
 
-	public String writeChunked(String db, String table, String objectName, InputStream is)
-			throws Exception {
+	public String writeChunked(String db, String table, String objectName,
+			InputStream is) {
 		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
 				keyspace, table);
-		ObjectMetadata meta = ChunkedStorage
-				.newWriter(provider, objectName,
-						is)
-				.withChunkSize(0x40000)
-				.withConcurrencyLevel(8)
-				.withMaxWaitTime(10)
-				.call();
-		if (meta!=null && meta.getObjectSize()<=0)
-			throw new RuntimeException("Object does not exist");
+		ObjectMetadata meta;
+		try {
+			meta = ChunkedStorage.newWriter(provider, objectName, is)
+					.withChunkSize(0x40000).withConcurrencyLevel(8)
+					.withMaxWaitTime(10).call();
+			if (meta != null && meta.getObjectSize() <= 0)
+				throw new RuntimeException("Object does not exist");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
 		return "{\"msg\":\"ok\"}";
 	}
 
-	public OutputStream readChunked(String db, String table, String objName)
-			throws Exception {
+	public ByteArrayOutputStream readChunked(String db, String table, String objName) {
 		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
 				keyspace, table);
-		ObjectMetadata meta = ChunkedStorage.newInfoReader(provider, objName)
-				.call();
-		ByteArrayOutputStream os = new ByteArrayOutputStream(meta
-				.getObjectSize().intValue());
-		meta = ChunkedStorage.newReader(provider, objName, os)
-				.withConcurrencyLevel(8)
-				.withMaxWaitTime(10)
-				.withBatchSize(10)
-				.call();
+		ObjectMetadata meta;
+		ByteArrayOutputStream os = null;
+		try {
+			meta = ChunkedStorage.newInfoReader(provider, objName).call();
+			os = new ByteArrayOutputStream(meta.getObjectSize().intValue());
+			meta = ChunkedStorage.newReader(provider, objName, os)
+					.withConcurrencyLevel(8).withMaxWaitTime(10)
+					.withBatchSize(10).call();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+
 		return os;
 	}
 
@@ -236,6 +241,6 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 
 	public void closeConnection() {
 		// TODO Auto-generated method stub
-		// No API exists for this in current implementation todo:investigate 
+		// No API exists for this in current implementation todo:investigate
 	}
 }

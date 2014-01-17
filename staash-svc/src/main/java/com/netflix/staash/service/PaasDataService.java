@@ -19,6 +19,8 @@
  ******************************************************************************/
 package com.netflix.staash.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.concurrent.Executors;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -147,6 +149,23 @@ public class PaasDataService implements DataService{
         JsonObject keyval = new JsonObject(ret).getObject("1");
         String val = keyval.getString("value");
         return val.getBytes();
+	}
+
+	public byte[] readChunked(String db, String table, String objectName) {
+		JsonObject storageConf = meta.getStorageForTable(db+"."+table);
+        if (storageConf == null) return "{\"msg\":\"the requested table does not exist in paas\"}".getBytes();
+        PaasConnection conn = fac.createConnection(storageConf,db);
+        ByteArrayOutputStream os =  conn.readChunked(db, table, objectName);
+        return os.toByteArray();
+	}	
+
+	public String writeChunked(String db, String table, String objectName,
+			InputStream is) {
+		// TODO Auto-generated method stub
+		JsonObject storageConf = meta.getStorageForTable(db+"."+table);
+        if (storageConf == null) return "{\"msg\":\"the requested table does not exist in paas\"}";
+        PaasConnection conn = fac.createConnection(storageConf,db);
+        return conn.writeChunked(db, table, objectName, is);
 	}
 
    
