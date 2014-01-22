@@ -27,6 +27,7 @@ import com.netflix.staash.test.core.CassandraRunner;
 public class TestChunking {
 	Keyspace keyspace;
 	@Before
+	@Ignore
 	public void setup() {
 		AstyanaxContext<Keyspace> context = new AstyanaxContext.Builder()
 				.forCluster("Test Cluster")

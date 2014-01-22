@@ -21,8 +21,6 @@ apply plugin: 'osgi'
 
 apply from: file('gradle/convention.gradle')
 apply from: file('gradle/maven.gradle')
-//apply from: file('gradle/check.gradle')
-//apply from: file('gradle/license.gradle')
 apply from: file('gradle/release.gradle')
 apply from: file('gradle/dependency-versions.gradle')
 
@@ -38,7 +36,6 @@ subprojects {
         compile     'com.google.inject:guice:3.0'
         compile     'com.google.inject.extensions:guice-multibindings:3.0'
         compile     'com.sun.jersey:jersey-core:1.9.1'
-        //compile     'com.sun.jersey:jersey-server:1.8'
         compile     'com.sun.jersey.contribs:jersey-guice:1.9.1'
 	compile     'com.sun.jersey.contribs:jersey-multipart:1.9.1'
         compile     'org.slf4j:slf4j-api:1.6.3'
@@ -118,11 +115,11 @@ project(':staash-svc') {
         testCompile 'junit:junit:4.11'
     }
 }
-project(':staash-tomcat') {
-	apply plugin: 'java'
-	dependencies {
-		compile     'javax.servlet:servlet-api:2.5'
-		compile     'com.sun.jersey:jersey-server:1.9.1'		
+//project(':staash-tomcat') {
+	//apply plugin: 'java'
+	//dependencies {
+		//compile     'javax.servlet:servlet-api:2.5'
+		//compile     'com.sun.jersey:jersey-server:1.9.1'		
 		//compile		'org.apache.tomcat:tomcat-catalina:7.0.0'
 		//compile     'org.apache.tomcat.embed:tomcat-embed-core:7.0.0'
 		//compile      'org.apache.tomcat:jasper:7.0.0'
@@ -130,17 +127,17 @@ project(':staash-tomcat') {
 		//compile      'tomcat:tomcat-util:7.0.16'
 		//compile      'org.apache.tomcat:tomcat-coyote:7.0.27'
 		
-		compile		'org.apache.tomcat:catalina:6.0.18'
-		compile      'org.apache.tomcat:coyote:6.0.18'
-		compile      'org.apache.tomcat:jasper:6.0.18'
+		//compile		'org.apache.tomcat:catalina:6.0.18'
+		//compile      'org.apache.tomcat:coyote:6.0.18'
+		//compile      'org.apache.tomcat:jasper:6.0.18'
 		
 		//compile     project(':staash-web')
 		//compile     project(':staash-astyanax')
 		//compile     project(':staash-eureka')
 		//compile 	project(':staash-svc')
 		//testCompile 'junit:junit:4.11'
-	}
-}
+	//}
+//}
 
 project(':staash-web') {
 	apply plugin: 'war'
