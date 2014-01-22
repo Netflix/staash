@@ -2,7 +2,7 @@
 ext.githubProjectName = rootProject.name // Change if github project name is not the same as the root project's name
 //ext.githubProjectName = "staash"
 ext {
-    astyanax_version="1.56.37"
+    astyanax_version="1.56.48"
     jersey_version="1.9.1"
 }
 
