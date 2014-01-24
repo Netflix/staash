@@ -107,7 +107,7 @@ public class PaasPropertiesModule extends AbstractModule {
                         .setConnectionPoolType(
                                 ConnectionPoolType.TOKEN_AWARE)
                         .setDiscoveryDelayInSeconds(60000)
-                        .setTargetCassandraVersion("1.1")
+                        .setTargetCassandraVersion("1.2")
                         .setCqlVersion("3.0.0"))
                         .withHostSupplier(hs.getSupplier(clustername))
         .withConnectionPoolConfiguration(

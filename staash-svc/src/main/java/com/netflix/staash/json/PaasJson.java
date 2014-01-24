@@ -19,7 +19,6 @@
  ******************************************************************************/
 package com.netflix.staash.json;
 
-import com.netflix.paas.json.JsonObject;
 
 public class PaasJson {
     public static final String CASS_STORAGE = new JsonObject().putString("name", "name")

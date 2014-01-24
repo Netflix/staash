@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 @RequiresKeyspace(ksName = "myks")
 @RequiresColumnFamily(ksName = "myks", cfName = "uuidtest", comparator = "org.apache.cassandra.db.marshal.UTF8Type", keyValidator = "org.apache.cassandra.db.marshal.UUIDType")
 @SuppressWarnings({ "rawtypes", "unchecked" })
+@Ignore
 public class DumyTest {
     @Test
     @Ignore

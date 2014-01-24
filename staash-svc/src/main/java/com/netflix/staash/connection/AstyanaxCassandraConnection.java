@@ -78,7 +78,7 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 								.setConnectionPoolType(
 										ConnectionPoolType.TOKEN_AWARE)
 								.setDiscoveryDelayInSeconds(60000)
-								.setTargetCassandraVersion("1.1")
+								.setTargetCassandraVersion("1.2")
 								.setCqlVersion("3.0.0"))
 				.withHostSupplier(supplier.getSupplier(clustername))
 				.withConnectionPoolConfiguration(
@@ -98,13 +98,13 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 	public String insert(String db, String table, JsonObject payload) {
 
 		try {
-			if (payload.getString("type").equals("kv")) {
-				String str = Hex.bytesToHex(payload.getBinary("value"));
-				String stmt = "insert into " + db + "." + table
-						+ "(key, value)" + " values('"
-						+ payload.getString("key") + "' , '" + str + "');";
-				keyspace.prepareCqlStatement().withCql(stmt).execute();
-			} else {
+//			if (payload.getString("type").equals("kv")) {
+//				String str = Hex.bytesToHex(payload.getBinary("value"));
+//				String stmt = "insert into " + db + "." + table
+//						+ "(key, value)" + " values('"
+//						+ payload.getString("key") + "' , '" + str + "');";
+//				keyspace.prepareCqlStatement().withCql(stmt).execute();
+//			} else {
 				String query = QueryFactory.BuildQuery(QueryType.INSERT,
 						StorageType.CASSANDRA);
 				keyspace.prepareCqlStatement()
@@ -112,7 +112,7 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 								String.format(query, db + "." + table,
 										payload.getString("columns"),
 										payload.getValue("values"))).execute();
-			}
+//			}
 		} catch (ConnectionException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
