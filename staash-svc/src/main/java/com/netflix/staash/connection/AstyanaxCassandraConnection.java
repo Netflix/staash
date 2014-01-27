@@ -129,6 +129,7 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 				keyspace, table);
 		ObjectMetadata meta;
 		try {
+//			if (is!=null) is.reset();
 			meta = ChunkedStorage.newWriter(provider, objectName, is)
 					.withChunkSize(0x40000).withConcurrencyLevel(8)
 					.withMaxWaitTime(10).call();

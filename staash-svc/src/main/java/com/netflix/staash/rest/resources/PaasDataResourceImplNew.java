@@ -20,6 +20,7 @@
 package com.netflix.staash.rest.resources;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -148,10 +149,12 @@ public class PaasDataResourceImplNew {
 	@Path("/kvstore/{key}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public byte[] getObject(@PathParam("key") String key) {
-		byte[] value = datasvc.fetchValueForKey("kvstore", "kvmap", "key", key);
+//		byte[] value = datasvc.fetchValueForKey("kvstore", "kvmap", "key", key);
+		byte[] value = datasvc.readChunked("kvstore", "kvmap", key);
 		return value;
 
 	}
+	
 	@POST
 	@Path("/kvstore")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -159,9 +162,35 @@ public class PaasDataResourceImplNew {
 	public String storeFile(
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@FormDataParam("value") FormDataContentDisposition fileDetail) {
-		writeToKVStore(uploadedInputStream, fileDetail.getFileName());
+//		writeToKVStore(uploadedInputStream, fileDetail.getFileName());
+		writeToChunkedKVStore(fileDetail.getFileName(), uploadedInputStream);
 		return "success";
 
+	}
+	
+	private void writeToChunkedKVStore(String objectName, InputStream is) {
+		try {
+			String uploadedFileLocation = "/tmp/" + objectName;
+			OutputStream out = new FileOutputStream(new File(
+					uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = is.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+			byte[] fbytes = Files.toByteArray(new File(uploadedFileLocation));
+			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000) {
+				throw new RuntimeException("File is too large to upload, max size supported is 2MB");
+			}
+			InputStream input = new FileInputStream(new File(uploadedFileLocation));
+			datasvc.writeChunked("kvstore", "kvmap", objectName, input);
+		} catch (IOException e) {
+			throw new RuntimeException(e.getMessage());
+		} 
 	}
 
 	private void writeToKVStore(InputStream uploadedInputStream,
@@ -187,7 +216,7 @@ public class PaasDataResourceImplNew {
 			JsonObject obj = new JsonObject();
 			obj.putString("key", uploadedFileName);
 			obj.putBinary("value", fbytes);
-			datasvc.writeToKVStore("kvstore", "kvmap", obj);
+			datasvc.writeToKVStore("kvstore", "kvmapnochunks", obj);
 
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
