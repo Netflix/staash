@@ -59,8 +59,7 @@ public class PaasDataService implements DataService{
         PaasConnection conn = fac.createConnection(storageConf,db);
         return conn.read(db,table,keycol,key);
     }
-    public String writeEvents(String db, String table, JsonArray events) {
-    	
+    public String writeEvents(String db, String table, JsonArray events) {    	
     		for (Object event: events) {
     			JsonObject obj = (JsonObject) event;
     			writeEvent(db, table, obj);
