@@ -146,8 +146,8 @@ project(':staash-web') {
 		compile     'javax.servlet:servlet-api:2.5'
 		compile     'com.sun.jersey:jersey-server:1.9.1'
 		compile 	project(':staash-svc')
-		compile     'junit:junit:4.11'
 		compile     'org.apache.cassandra:cassandra-all:1.2.3'
+		testCompile     'junit:junit:4.11'
 	}
 }
 
