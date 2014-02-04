@@ -140,7 +140,6 @@ project(':staash-svc') {
 //}
 
 project(':staash-web') {
-	apply plugin: 'war'
 	apply plugin:   'java'
 	dependencies {
 		compile     'javax.servlet:servlet-api:2.5'
