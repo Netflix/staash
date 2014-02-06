@@ -26,6 +26,7 @@ import com.datastax.driver.core.policies.RoundRobinPolicy;
 import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.netflix.astyanax.AstyanaxContext;
@@ -160,6 +161,7 @@ public class PaasPropertiesModule extends AbstractModule {
         else  return new AstyanaxMetaDaoImpl(keyspace);
     }
     @Provides
+    @Singleton
     MetaService providePaasMetaService(@Named("newmetadao") MetaDao metad, ConnectionFactory fac, CacheService cache) {
         PaasMetaService metasvc = new PaasMetaService(metad, fac, cache);
         return metasvc;
@@ -170,6 +172,7 @@ public class PaasPropertiesModule extends AbstractModule {
         return datasvc;
     }
     @Provides
+    @Singleton
     CacheService provideCacheService(@Named("newmetadao") MetaDao metad) {
         return new CacheService(metad);
     }
