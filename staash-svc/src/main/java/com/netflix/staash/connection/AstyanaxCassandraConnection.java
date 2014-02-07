@@ -61,14 +61,17 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 
 	private Keyspace createAstyanaxKeyspace(String clustername, String db,
 			EurekaAstyanaxHostSupplier supplier) {
-		String clusterNameOnly = "";
+		String clusterNameOnly = "localhost";
+		String clusterPortOnly = "9160";
 		String[] clusterinfo = clustername.split(":");
 		if (clusterinfo != null && clusterinfo.length == 2) {
 			clusterNameOnly = clusterinfo[0];
 		} else {
 			clusterNameOnly = clustername;
 		}
-		AstyanaxContext<Keyspace> keyspaceContext = new AstyanaxContext.Builder()
+		AstyanaxContext<Keyspace> keyspaceContext;
+		if (supplier!=null) {
+		keyspaceContext = new AstyanaxContext.Builder()
 				.forCluster("Casss_Paas")
 				.forKeyspace(db)
 				.withAstyanaxConfiguration(
@@ -89,6 +92,29 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 								.setSeeds(null))
 				.withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
 				.buildKeyspace(ThriftFamilyFactory.getInstance());
+		} else {
+			keyspaceContext = new AstyanaxContext.Builder()
+	        .forCluster(clusterNameOnly)
+	        .forKeyspace(db)
+	        .withAstyanaxConfiguration(
+	                new AstyanaxConfigurationImpl()
+	                        .setDiscoveryType(
+	                                NodeDiscoveryType.RING_DESCRIBE)
+	                        .setConnectionPoolType(
+	                                ConnectionPoolType.TOKEN_AWARE)
+	                        .setDiscoveryDelayInSeconds(60000)
+	                        .setTargetCassandraVersion("1.2")
+	                        .setCqlVersion("3.0.0"))
+	                        //.withHostSupplier(hs.getSupplier(clustername))
+	        .withConnectionPoolConfiguration(
+	                new ConnectionPoolConfigurationImpl(clusterNameOnly
+	                        + "_" + db)
+	                        .setSocketTimeout(3000)
+	                        .setMaxTimeoutWhenExhausted(2000)
+	                        .setMaxConnsPerHost(3).setInitConnsPerHost(1)	 
+	                      .setSeeds(clusterNameOnly+":"+clusterPortOnly))
+	         .buildKeyspace(ThriftFamilyFactory.getInstance());
+		}
 		keyspaceContext.start();
 		Keyspace keyspace;
 		keyspace = keyspaceContext.getClient();

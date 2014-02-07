@@ -17,7 +17,7 @@
  *  *
  *  *
  ******************************************************************************/
-package com.netflix.staash.tests;
+package com.netflix.staash.web.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import org.junit.Before;

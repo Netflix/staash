@@ -33,7 +33,7 @@ import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.meta.entity.EntityType;
 import com.netflix.staash.service.MetaService;
 
-@Path("/v1/admin")
+@Path("/staash/v1/admin")
 public class PaasAdminResourceImplNew {
     private MetaService metasvc;
     @Inject
@@ -44,7 +44,6 @@ public class PaasAdminResourceImplNew {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listSchemas() {
-        // TODO Auto-generated method stub
         String schemas = metasvc.listSchemas();
         return schemas;
     }
@@ -52,7 +51,6 @@ public class PaasAdminResourceImplNew {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/storage")
     public String listStorage() {
-        // TODO Auto-generated method stub
         String storages = metasvc.listStorage();
         return storages;
     }
@@ -61,7 +59,6 @@ public class PaasAdminResourceImplNew {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{schema}")
     public String listTables(@PathParam("schema") String schema) {
-        // TODO Auto-generated method stub
         String schemas = metasvc.listTablesInSchema(schema);
         return schemas;
     }
@@ -70,23 +67,14 @@ public class PaasAdminResourceImplNew {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/timeseries/{schema}")
     public String listTimeseries(@PathParam("schema") String schema) {
-        // TODO Auto-generated method stub
         String schemas = metasvc.listTimeseriesInSchema(schema);
         return schemas;
     }
     
-    @GET
-    @Path("cluster")
-    public String listSchemas(@PathParam("cluster")String cluster) {
-        // TODO Auto-generated method stub
-        //just a test method to see service is loaded
-        return "hello";
-    }
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String createSchema(String payLoad) {
-        // TODO Auto-generated method stub
         if (payLoad!=null) {
             try {
                 return metasvc.writeMetaEntity(EntityType.DB, payLoad);
@@ -102,12 +90,10 @@ public class PaasAdminResourceImplNew {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/storage")
     public String createStorage(String payload) {
-        // TODO Auto-generated method stub
         if (payload!=null) {
             try {
                 return metasvc.writeMetaEntity(EntityType.STORAGE, payload);
             } catch (StorageDoesNotExistException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -118,7 +104,6 @@ public class PaasAdminResourceImplNew {
     @DELETE
     @Path("{schema}")
     public void deleteSchema(@PathParam("schema") String schemaName) {
-        // TODO Auto-generated method stub
         
     }
 
@@ -128,7 +113,6 @@ public class PaasAdminResourceImplNew {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String createTable(@PathParam("schema") String schemaName, String payload) {
-        // TODO Auto-generated method stub
         JsonObject obj;
         try {
             if (payload!=null) {
@@ -147,8 +131,8 @@ public class PaasAdminResourceImplNew {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String createTimeseries(@PathParam("schema") String schemaName, String payload) {
-        // TODO Auto-generated method stub
-        JsonObject obj;
+
+    	JsonObject obj;
         try {
             if (payload!=null) {
                 return metasvc.writeMetaEntity(EntityType.SERIES, payload);

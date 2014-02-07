@@ -27,7 +27,6 @@ public class TestPaasRest {
         metasvc = inj.getInstance(PaasMetaService.class);
 //        datasvc = new PaasDataService(metasvc, Guice.createInjector(pmod).getInstance(ConnectionFactory.class));
         datasvc = inj.getInstance(PaasDataService.class);
-        int i = 0;
     }
     @Test
     @Ignore
