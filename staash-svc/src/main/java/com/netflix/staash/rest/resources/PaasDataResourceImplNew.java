@@ -37,9 +37,11 @@ import com.google.inject.Inject;
 import com.netflix.staash.json.JsonArray;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.util.StaashConstants;
+import com.netflix.staash.rest.util.StaashRequestContext;
 import com.netflix.staash.service.DataService;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/data")
 public class PaasDataResourceImplNew {
@@ -53,6 +55,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("{db}/{table}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String listAllRow(@PathParam("db") String db,
 			@PathParam("table") String table) {
 		return datasvc.listRow(db, table, "", "");
@@ -61,6 +64,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("{db}/{table}/{keycol}/{key}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String listRow(@PathParam("db") String db,
 			@PathParam("table") String table,
 			@PathParam("keycol") String keycol, @PathParam("key") String key) {
@@ -70,6 +74,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("/join/{db}/{table1}/{table2}/{joincol}/{value}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String doJoin(@PathParam("db") String db,
 			@PathParam("table1") String table1,
 			@PathParam("table2") String table2,
@@ -81,6 +86,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("/timeseries/{db}/{table}/{eventtime}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String readEvent(@PathParam("db") String db,
 			@PathParam("table") String table,
 			@PathParam("eventtime") String time) {
@@ -96,6 +102,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("/timeseries/{db}/{table}/{prefix}/{eventtime}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String readEvent(@PathParam("db") String db,
 			@PathParam("table") String table,
 			@PathParam("prefix") String prefix,
@@ -112,6 +119,7 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("/timeseries/{db}/{table}/{prefix}/{starttime}/{endtime}")
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String readEvent(@PathParam("db") String db,
 			@PathParam("table") String table,
 			@PathParam("prefix") String prefix,
@@ -130,6 +138,7 @@ public class PaasDataResourceImplNew {
 	@Path("{db}/{table}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String updateRow(@PathParam("db") String db,
 			@PathParam("table") String table, String rowObject) {
 		return datasvc.writeRow(db, table, new JsonObject(rowObject));
@@ -139,6 +148,7 @@ public class PaasDataResourceImplNew {
 	@Path("/timeseries/{db}/{table}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String insertEvent(@PathParam("db") String db,
 			@PathParam("table") String table, String rowStr) {
 		JsonArray eventsArr = new JsonArray(rowStr);
@@ -148,9 +158,11 @@ public class PaasDataResourceImplNew {
 	@GET
 	@Path("/kvstore/{key}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @ResourceFilters(StaashAuditFilter.class)
 	public byte[] getObject(@PathParam("key") String key) {
 //		byte[] value = datasvc.fetchValueForKey("kvstore", "kvmap", "key", key);
 		byte[] value = datasvc.readChunked("kvstore", "kvmap", key);
+		StaashRequestContext.addContext("N-BYTES", String.valueOf(value.length));
 		return value;
 
 	}
@@ -159,6 +171,7 @@ public class PaasDataResourceImplNew {
 	@Path("/kvstore")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.TEXT_PLAIN)
+    @ResourceFilters(StaashAuditFilter.class)
 	public String storeFile(
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@FormDataParam("value") FormDataContentDisposition fileDetail) {
@@ -183,6 +196,9 @@ public class PaasDataResourceImplNew {
 			out.flush();
 			out.close();
 			byte[] fbytes = Files.toByteArray(new File(uploadedFileLocation));
+			
+			StaashRequestContext.addContext("N-BYTES", String.valueOf(fbytes.length));
+
 			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000) {
 				throw new RuntimeException("File is too large to upload, max size supported is 2MB");
 			}
