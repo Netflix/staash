@@ -32,6 +32,7 @@ import com.netflix.staash.exception.StorageDoesNotExistException;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.meta.entity.EntityType;
 import com.netflix.staash.service.MetaService;
+import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/admin")
 public class PaasAdminResourceImplNew {
@@ -43,6 +44,7 @@ public class PaasAdminResourceImplNew {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
     public String listSchemas() {
         String schemas = metasvc.listSchemas();
         return schemas;
@@ -50,6 +52,7 @@ public class PaasAdminResourceImplNew {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/storage")
+    @ResourceFilters(StaashAuditFilter.class)
     public String listStorage() {
         String storages = metasvc.listStorage();
         return storages;
@@ -58,6 +61,7 @@ public class PaasAdminResourceImplNew {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{schema}")
+    @ResourceFilters(StaashAuditFilter.class)
     public String listTables(@PathParam("schema") String schema) {
         String schemas = metasvc.listTablesInSchema(schema);
         return schemas;
@@ -66,6 +70,7 @@ public class PaasAdminResourceImplNew {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/timeseries/{schema}")
+    @ResourceFilters(StaashAuditFilter.class)
     public String listTimeseries(@PathParam("schema") String schema) {
         String schemas = metasvc.listTimeseriesInSchema(schema);
         return schemas;
@@ -74,6 +79,7 @@ public class PaasAdminResourceImplNew {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
     public String createSchema(String payLoad) {
         if (payLoad!=null) {
             try {
@@ -89,6 +95,7 @@ public class PaasAdminResourceImplNew {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/storage")
+    @ResourceFilters(StaashAuditFilter.class)
     public String createStorage(String payload) {
         if (payload!=null) {
             try {
@@ -103,6 +110,7 @@ public class PaasAdminResourceImplNew {
 
     @DELETE
     @Path("{schema}")
+    @ResourceFilters(StaashAuditFilter.class)
     public void deleteSchema(@PathParam("schema") String schemaName) {
         
     }
@@ -112,6 +120,7 @@ public class PaasAdminResourceImplNew {
     @Path("{schema}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
     public String createTable(@PathParam("schema") String schemaName, String payload) {
         JsonObject obj;
         try {
@@ -130,6 +139,7 @@ public class PaasAdminResourceImplNew {
     @Path("/timeseries/{schema}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
     public String createTimeseries(@PathParam("schema") String schemaName, String payload) {
 
     	JsonObject obj;
@@ -148,6 +158,7 @@ public class PaasAdminResourceImplNew {
     @Path("/extend/{db}/{region}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
     public String extendDB(String db, String region) {
         return metasvc.extenddb(db, region).toString();
     }
