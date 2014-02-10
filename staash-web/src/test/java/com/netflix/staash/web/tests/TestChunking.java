@@ -18,8 +18,14 @@
  *  *
  ******************************************************************************/
 package com.netflix.staash.web.tests;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -45,12 +51,20 @@ import com.netflix.staash.test.core.CassandraRunner;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class TestChunking {
 	Keyspace keyspace;
+	private static final String KEY = "myks";
+	private static final String CF = "chunks";
+	private static final String ENC1 = "SHA-1";
+	private static final String ENC2 = "MD5";// optional, less strength
+	private static final String OBJASC = "testascii";
+	private static final String OBJBIN = "testbinary";
+	private static final String FILEASC = "chunktest.html";
+	private static final String FILEBIN = "test.exe";
+
 	@Before
-	@Ignore
 	public void setup() {
 		AstyanaxContext<Keyspace> context = new AstyanaxContext.Builder()
 				.forCluster("Test Cluster")
-				.forKeyspace("myks")
+				.forKeyspace(KEY)
 				.withAstyanaxConfiguration(
 						new AstyanaxConfigurationImpl()
 								.setDiscoveryType(NodeDiscoveryType.RING_DESCRIBE))
@@ -67,27 +81,92 @@ public class TestChunking {
 
 	@Test
 	@Ignore
-	public void chunktest() {
+	public void chunktestbinary() throws IOException {
 		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
-				keyspace, "chunks");
+				keyspace, CF);
+		InputStream fis = null;
+		InputStream bis = null;
 		try {
-			InputStream fis = this.getClass().getClassLoader().getResource("chunktest.html").openStream();
+			fis = this.getClass().getClassLoader().getResource(FILEBIN)
+					.openStream();
 			ObjectMetadata meta = ChunkedStorage
-					.newWriter(provider, "test1", fis).withChunkSize(0x1000) 
-					.withConcurrencyLevel(8) 
-					.withTtl(60) // Optional TTL for the entire object
+					.newWriter(provider, OBJBIN, fis).withChunkSize(0x1000)
+					.withConcurrencyLevel(8).withTtl(60) // Optional TTL for the
+															// entire object
 					.call();
 			Long writesize = meta.getObjectSize();
-			Long readsize = readChunked("myks","chunks","test1");
-			assert(writesize == readsize);
+			// Long readsize = readChunked("myks","chunks","test1");
+			byte[] written = new byte[writesize.intValue()];
+			 bis =
+			 this.getClass().getClassLoader().getResource(FILEBIN).openStream();
+			 int i1 = ((BufferedInputStream)bis).read(written, 0,
+			 writesize.intValue());
+			 System.out.println("length read = "+i1);
+			byte[] read = readChunked(KEY, CF, OBJBIN);
+			boolean cmp = compareMD5(written, read);
+			assert cmp == true;
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (fis != null)
+				fis.close();
+			if (bis!=null) 
+				bis.close();
 		}
 	}
 
-	public Long readChunked(String db, String table, String objName)
+	@Test
+	public void chunktestascii() throws IOException {
+		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
+				keyspace, CF);
+		InputStream fis = null;
+		InputStream bis = null;
+		try {
+			fis = this.getClass().getClassLoader().getResource(FILEASC)
+					.openStream();
+			ObjectMetadata meta = ChunkedStorage
+					.newWriter(provider, OBJASC, fis).withChunkSize(0x1000)
+					.withConcurrencyLevel(8).withTtl(60) // Optional TTL for the
+															// entire object
+					.call();
+			Long writesize = meta.getObjectSize();
+			// Long readsize = readChunked("myks","chunks","test1");
+			byte[] written = new byte[writesize.intValue()];
+			 bis =
+			 this.getClass().getClassLoader().getResource("chunktest.html").openStream();
+			 int i1 = ((BufferedInputStream)bis).read(written, 0,
+			 writesize.intValue());
+			 System.out.println("length read = "+i1);
+			byte[] read = readChunked(KEY, CF, OBJASC);
+			boolean cmp = compareMD5(written, read);
+			assert cmp == true;
+			Thread.sleep(1000);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (fis != null)
+				fis.close();
+			if (bis!=null) 
+				bis.close();
+		} 
+	}
+
+	public boolean compareMD5(byte[] written, byte[] read) {
+		try {
+			MessageDigest md = MessageDigest.getInstance(ENC1);
+			byte[] wdigest = md.digest(written);
+			byte[] rdigest = md.digest(read);
+			return Arrays.equals(wdigest, rdigest);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			throw new RuntimeException(e.getCause());
+		}
+	}
+
+	public byte[] readChunked(String db, String table, String objName)
 			throws Exception {
 		ChunkedStorageProvider provider = new CassandraChunkedStorageProvider(
 				keyspace, table);
@@ -97,6 +176,6 @@ public class TestChunking {
 				.getObjectSize().intValue());
 		meta = ChunkedStorage.newReader(provider, objName, os)
 				.withBatchSize(10).call();
-		return meta.getObjectSize();
+		return (os != null) ? os.toByteArray() : new byte[0];
 	}
 }
