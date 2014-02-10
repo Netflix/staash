@@ -1,8 +1,12 @@
 package com.netflix.staash.rest.resources;
 
+import java.util.List;
+import java.util.Map.Entry;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +48,12 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		StaashRequestContext.addContext("PATH", cReq.getPath(true));
 		StaashRequestContext.addContext("METHOD", cReq.getMethod());
 
+		Logger.info("Adding headers to request context");
+		addRequestHeaders(cReq);
+		
+		Logger.info("Adding query params to request context");
+		addQueryParameters(cReq);
+
 		return cReq;
 	}
 
@@ -57,4 +67,20 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		return response;
 	}
 	
+	
+	private void addRequestHeaders(ContainerRequest cReq) {
+		
+		MultivaluedMap<String, String> headers = cReq.getRequestHeaders();
+		for (Entry<String, List<String>> e : headers.entrySet()) {
+			StaashRequestContext.addContext("H__" + e.getKey(), e.getValue().toString());
+		}
+	}
+	
+	private void addQueryParameters(ContainerRequest cReq) {
+		
+		MultivaluedMap<String, String> params = cReq.getQueryParameters();
+		for (Entry<String, List<String>> e : params.entrySet()) {
+			StaashRequestContext.addContext("Q__" + e.getKey(), e.getValue().toString());
+		}
+	}
 }
