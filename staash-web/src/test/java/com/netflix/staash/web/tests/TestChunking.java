@@ -26,6 +26,9 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import org.junit.Assert;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,7 +54,7 @@ import com.netflix.staash.test.core.CassandraRunner;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class TestChunking {
 	Keyspace keyspace;
-	private static final String KEY = "myks";
+	private static final String KS = "myks";
 	private static final String CF = "chunks";
 	private static final String ENC1 = "SHA-1";
 	private static final String ENC2 = "MD5";// optional, less strength
@@ -64,7 +67,7 @@ public class TestChunking {
 	public void setup() {
 		AstyanaxContext<Keyspace> context = new AstyanaxContext.Builder()
 				.forCluster("Test Cluster")
-				.forKeyspace(KEY)
+				.forKeyspace(KS)
 				.withAstyanaxConfiguration(
 						new AstyanaxConfigurationImpl()
 								.setDiscoveryType(NodeDiscoveryType.RING_DESCRIBE))
@@ -102,13 +105,14 @@ public class TestChunking {
 			 int i1 = ((BufferedInputStream)bis).read(written, 0,
 			 writesize.intValue());
 			 System.out.println("length read = "+i1);
-			byte[] read = readChunked(KEY, CF, OBJBIN);
+			byte[] read = readChunked(KS, CF, OBJBIN);
 			boolean cmp = compareMD5(written, read);
-			assert cmp == true;
+			Assert.assertTrue(cmp == true);
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Assert.fail(e.getMessage());
 		} finally {
 			if (fis != null)
 				fis.close();
@@ -139,13 +143,14 @@ public class TestChunking {
 			 int i1 = ((BufferedInputStream)bis).read(written, 0,
 			 writesize.intValue());
 			 System.out.println("length read = "+i1);
-			byte[] read = readChunked(KEY, CF, OBJASC);
+			byte[] read = readChunked(KS, CF, OBJASC);
 			boolean cmp = compareMD5(written, read);
-			assert cmp == true;
+			Assert.assertTrue(cmp == true);
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Assert.fail(e.getMessage());
 		} finally {
 			if (fis != null)
 				fis.close();
