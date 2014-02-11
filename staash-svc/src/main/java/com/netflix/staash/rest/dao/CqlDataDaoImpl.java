@@ -52,7 +52,7 @@ public class CqlDataDaoImpl implements DataDao {
         String query = BuildRowInsertQuery(db, table, rowObj);
         Print(query);
         //String storage = rowObj.getField("storage");
-        String storage = meta.getStorageMap().get(db+"."+table);
+        String storage = meta.runQuery("com.netflix.test.storage",db+"."+table).get(db+"."+table).getString("storage");
         if (storage!=null && storage.equals("mysql")) {
             MySqlService.insertRowIntoTable(db, table, query);
         } else {
@@ -68,7 +68,7 @@ public class CqlDataDaoImpl implements DataDao {
         String columns = rowObj.getString("columns");
         String values = rowObj.getString("values");
         //String storage = rowObj.getField("storage");
-        String storage = meta.getStorageMap().get(db+"."+table);
+        String storage = meta.runQuery("com.netflix.test.storage",db+"."+table).get(db+"."+table).getString("storage");
         if (storage!=null && storage.contains("mysql")) return "INSERT INTO" + " " + table + "(" + columns + ")"
                 + " VALUES(" + values + ");";else
         return "INSERT INTO" + " " + db + "." + table + "(" + columns + ")"
@@ -98,7 +98,7 @@ public class CqlDataDaoImpl implements DataDao {
 
     public String listRow(String db, String table, String keycol, String key) {
         // TODO Auto-generated method stub
-        String storage = meta.getStorageMap().get(db+"."+table);
+        String storage = meta.runQuery("com.netflix.test.storage",db+"."+table).get(db+"."+table).getString("storage");
         if (storage!=null && storage.contains("mysql")) {
             String query = "select * from "+table+" where "+keycol+"=\'"+key+"\'";
             Print(query);

@@ -68,26 +68,26 @@ public class PaasPropertiesModule extends AbstractModule {
     private static Properties loadProperties() throws Exception {
         Properties properties = new Properties();
         ClassLoader loader = PaasPropertiesModule.class.getClassLoader();
-        URL url = loader.getResource("paas.properties");
+        URL url = loader.getResource("staash.properties");
         properties.load(url.openStream());
         return properties;
     }
     @Provides
     @Named("metacluster")
-    Cluster provideCluster(@Named("paas.cassclient") String clientType,@Named("paas.metacluster") String clustername) {
+    Cluster provideCluster(@Named("staash.cassclient") String clientType,@Named("staash.metacluster") String clustername) {
         if (clientType.equals("cql")) {
         Cluster cluster = Cluster.builder().addContactPoint(clustername).build();
         return cluster;
         } else return null;
     }
     @Provides
-    HostSupplier provideHostSupplier(@Named("paas.metacluster") String clustername) {
+    HostSupplier provideHostSupplier(@Named("staash.metacluster") String clustername) {
         
         return null;        
     }
     @Provides
     @Named("astmetaks")
-    Keyspace provideKeyspace(@Named("paas.metacluster") String clustername,EurekaAstyanaxHostSupplier hs) {
+    Keyspace provideKeyspace(@Named("staash.metacluster") String clustername,EurekaAstyanaxHostSupplier hs) {
         String clusterNameOnly = "";
         String clusterPortOnly = "";
         String[] clusterinfo = clustername.split(":");
@@ -127,25 +127,25 @@ public class PaasPropertiesModule extends AbstractModule {
     }
     @Provides
     @Named("datacluster")
-    Cluster provideDataCluster(@Named("paas.datacluster") String clustername) {        
+    Cluster provideDataCluster(@Named("staash.datacluster") String clustername) {        
         Cluster cluster = Cluster.builder().addContactPoint(clustername).build();
         return cluster;
     }    
     @Provides
-    MetaDao provideCqlMetaDao(@Named("paas.cassclient") String clientType, @Named("metacluster") Cluster cluster,@Named("astmetaks") Keyspace keyspace) {
+    MetaDao provideCqlMetaDao(@Named("staash.cassclient") String clientType, @Named("metacluster") Cluster cluster,@Named("astmetaks") Keyspace keyspace) {
         if (clientType.equals("cql"))
         return new CqlMetaDaoImpl(cluster );
         else return new AstyanaxMetaDaoImpl(keyspace);
     }
     @Provides
-    DataDao provideCqlDataDao(@Named("paas.cassclient") String clientType, @Named("datacluster") Cluster cluster, MetaDao meta) {
+    DataDao provideCqlDataDao(@Named("staash.cassclient") String clientType, @Named("datacluster") Cluster cluster, MetaDao meta) {
         if (clientType.equals("cql"))
         return new CqlDataDaoImpl(cluster, meta);
         else return new AstyanaxDataDaoImpl();
     }
     @Provides
     @Named("pooledmetacluster")
-    Cluster providePooledCluster(@Named("paas.cassclient") String clientType,@Named("paas.metacluster") String clustername) {
+    Cluster providePooledCluster(@Named("staash.cassclient") String clientType,@Named("staash.metacluster") String clustername) {
         if (clientType.equals("cql")) {
         Cluster cluster = Cluster.builder().withLoadBalancingPolicy(new TokenAwarePolicy(new RoundRobinPolicy())).addContactPoint(clustername).build();
         return cluster;
@@ -155,7 +155,7 @@ public class PaasPropertiesModule extends AbstractModule {
     }
     @Provides
     @Named("newmetadao")
-    MetaDao provideCqlMetaDaoNew(@Named("paas.cassclient") String clientType, @Named("metacluster") Cluster cluster, @Named("astmetaks") Keyspace keyspace) {
+    MetaDao provideCqlMetaDaoNew(@Named("staash.cassclient") String clientType, @Named("metacluster") Cluster cluster, @Named("astmetaks") Keyspace keyspace) {
         if (clientType.equals("cql"))
         return new CqlMetaDaoImplNew(cluster );
         else  return new AstyanaxMetaDaoImpl(keyspace);
@@ -177,7 +177,7 @@ public class PaasPropertiesModule extends AbstractModule {
         return new CacheService(metad);
     }
     @Provides
-    ConnectionFactory provideConnectionFactory(@Named("paas.cassclient") String clientType,EurekaAstyanaxHostSupplier hs) {
+    ConnectionFactory provideConnectionFactory(@Named("staash.cassclient") String clientType,EurekaAstyanaxHostSupplier hs) {
         return new PaasConnectionFactory(clientType, hs);
     }
 }

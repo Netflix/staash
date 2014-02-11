@@ -169,7 +169,7 @@ public class PaasMetaService implements MetaService {
 
     public Map<String, String> getStorageMap() {
         // TODO Auto-generated method stub
-        return meta.getStorageMap();
+        return null;
     }
 
     public String CreateDB() {
@@ -186,39 +186,6 @@ public class PaasMetaService implements MetaService {
     }
     
     public JsonObject runQuery(EntityType etype, String col) {
-//        switch (etype) {
-//        case STORAGE:
-//            final Set<String> storages = cache.getStorageNames();
-//            if (storages.contains(col)) {
-//                return cache.getStorage(col);
-//            }
-//            break;
-//        case DB:
-//            final Set<String> dbnames = cache.getDbNames();
-//            if (dbnames.contains(col)) {
-//                return new JsonObject("\"name\":\""+col+"\"");
-//            }
-//            break;
-//        case TABLE:
-//            List<String> tables = cache.getTableNames(col);
-//            break;
-//        case SERIES:
-//            String tsschema = new JsonObject(payload).getString("db");
-//            PaasTimeseriesEntity ptse = PaasTimeseriesEntity.builder()
-//                    .withJsonPayLoad(new JsonObject(payload), tsschema)
-//                    .build();
-//            JsonObject obj = new JsonObject(ptse.getPayLoad());                
-//            createDBTable(ptse.getPayLoad());
-//            String retseries =  meta.writeMetaEntity(ptse);
-//            cache.addEntityToCache(ptse.getRowKey(), ptse);
-//            return retseries;
-//        }
         return meta.runQuery(etype.getId(), col).get(col);
     }
-
-    public JsonObject extenddb(String db, String region) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

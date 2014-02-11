@@ -43,5 +43,4 @@ public interface MetaService {
     public String createTable();
     public JsonObject runQuery(EntityType etype, String col);
     public JsonObject getStorageForTable(String table);
-    public JsonObject extenddb(String db, String region);
 }
