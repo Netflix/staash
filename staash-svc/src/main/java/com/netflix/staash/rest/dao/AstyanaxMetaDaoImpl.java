@@ -34,30 +34,65 @@ import com.netflix.astyanax.model.ColumnFamily;
 import com.netflix.astyanax.model.ColumnList;
 import com.netflix.astyanax.model.Row;
 import com.netflix.astyanax.serializers.StringSerializer;
+import com.netflix.config.DynamicPropertyFactory;
+import com.netflix.config.DynamicStringProperty;
 import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.meta.entity.Entity;
 import com.netflix.staash.rest.util.MetaConstants;
 import com.netflix.staash.rest.util.PaasUtils;
+import com.netflix.staash.rest.util.StaashRequestContext;
 
 public class AstyanaxMetaDaoImpl implements MetaDao {
 	private Keyspace keyspace;
 	private Logger logger = Logger.getLogger(AstyanaxMetaDaoImpl.class);
-	static ColumnFamily<String, String> TEST_CF = ColumnFamily.newColumnFamily(
+	private static final DynamicStringProperty METASTRATEGY = DynamicPropertyFactory
+			.getInstance().getStringProperty("staash.metastrategy",
+					"NetworkTopologyStrategy");
+	private static final DynamicStringProperty METARF = DynamicPropertyFactory
+			.getInstance().getStringProperty("staash.metareplicationfactor",
+					"us-east:3");
+
+	static ColumnFamily<String, String> METACF = ColumnFamily.newColumnFamily(
 			"metacf", StringSerializer.get(), StringSerializer.get());
 
 	@Inject
 	public AstyanaxMetaDaoImpl(@Named("astmetaks") Keyspace keyspace) {
 		this.keyspace = keyspace;
-		maybecreateschema();
+		try {
+			keyspace.describeKeyspace();
+			logger.info("keyspaces for staash exists already");
+			StaashRequestContext.addContext("Meta_Init",
+					"keyspace already existed");
+		} catch (ConnectionException ex) {
+			StaashRequestContext.addContext("Meta_Init",
+					"Keyspace did not exist , creating keyspace paasmetaks"
+							);
+			maybecreateschema();
+		}
+	}
+
+	private Map<String, Object> populateMap() {
+		Map<String, Object> rfMap = ImmutableMap.<String, Object> builder()
+				.build();
+		String rfStr = METARF.getValue();
+		String[] pairs = rfStr.split(",");
+		for (String pair : pairs) {
+			String[] kv = pair.split(":");
+			rfMap.put(kv[0], kv[1]);
+		}
+		return rfMap;
 	}
 
 	private void maybecreateschema() {
 		try {
 			boolean b = true;
+			logger.info("Strategy: " + METASTRATEGY.getValue() + " RF: "
+					+ METARF.getValue());
 			try {
-			b  =  keyspace.getConnectionPool().hasHost(new Host("localhost:9160", 9160));
+				b = keyspace.getConnectionPool().hasHost(
+						new Host("localhost:9160", 9160));
 			} catch (ConnectionException ex) {
-				
+
 			}
 			if (b) {
 				keyspace.createKeyspace(ImmutableMap
@@ -66,18 +101,26 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 								ImmutableMap.<String, Object> builder()
 										.put("replication_factor", "1").build())
 						.put("strategy_class", "SimpleStrategy").build());
-				
+
 			} else {
-			keyspace.createKeyspace(ImmutableMap
-					.<String, Object> builder()
-					.put("strategy_options",
-							ImmutableMap.<String, Object> builder()
-									.put("us-east", "3").build())
-					.put("strategy_class", "NetworkTopologyStrategy").build());
+				// keyspace.createKeyspace(ImmutableMap
+				// .<String, Object> builder()
+				// .put("strategy_options",
+				// ImmutableMap.<String, Object> builder()
+				// .put("us-east", "3").build())
+				// .put("strategy_class", METASTRATEGY).build());
+				keyspace.createKeyspace(ImmutableMap.<String, Object> builder()
+						.put("strategy_options", populateMap())
+						.put("strategy_class", METASTRATEGY).build());
 			}
+			StaashRequestContext.addContext("Meta_Init",
+					"Keyspace did not exist , created keyspace paasmetaks with rf:"
+							+ METARF.getValue());
 		} catch (ConnectionException e) {
 			// If we are here that means the meta artifacts already exist
 			logger.info("keyspaces for staash exists already");
+			StaashRequestContext.addContext("Meta_Init",
+					"keyspace already existed");
 		}
 
 		try {
@@ -86,9 +129,14 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 					+ "    PRIMARY KEY (key, column1)\n"
 					+ ") WITH COMPACT STORAGE;";
 			keyspace.prepareCqlStatement().withCql(metaDynamic).execute();
+			StaashRequestContext
+					.addContext("Meta_Init",
+							"Columnfamily did not exist , created keyspace metacf in paasmetaks ");
 		} catch (ConnectionException e) {
 			// if we are here means meta artifacts already exists, ignore
 			logger.info("staash column family exists");
+			StaashRequestContext.addContext("Meta_Init",
+					"Columnfamily already existed");
 		}
 	}
 
@@ -96,14 +144,13 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 		try {
 			String stmt = String.format(PaasUtils.INSERT_FORMAT, "paasmetaks"
 					+ "." + MetaConstants.META_COLUMN_FAMILY,
-					entity.getRowKey(), entity.getName(),
-					entity.getPayLoad());
-			keyspace.prepareCqlStatement()
-					.withCql(
-							stmt
-							).execute();
+					entity.getRowKey(), entity.getName(), entity.getPayLoad());
+			keyspace.prepareCqlStatement().withCql(stmt).execute();
+			StaashRequestContext.addContext("Meta_Write", "write succeeded on meta: "+ entity!=null?entity.getPayLoad():null);
 		} catch (ConnectionException e) {
-			e.printStackTrace();
+			logger.info("Write of the entity failed "+entity!=null?entity.getPayLoad():null);
+			StaashRequestContext.addContext("Meta_Write", "write failed on meta: "+ entity!=null?entity.getPayLoad():null);
+			throw new RuntimeException(e.getMessage());
 		}
 		return "{\"msg\":\"ok\"}";
 	}
@@ -125,7 +172,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 						+ key + "';";
 			}
 			rs = keyspace.prepareCqlStatement().withCql(queryStr).execute();
-			for (Row<String, String> row : rs.getResult().getRows(TEST_CF)) {
+			for (Row<String, String> row : rs.getResult().getRows(METACF)) {
 
 				ColumnList<String> columns = row.getColumns();
 

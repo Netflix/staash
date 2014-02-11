@@ -153,13 +153,4 @@ public class PaasAdminResourceImplNew {
         }
         return obj.toString();
     }
-    
-    @GET
-    @Path("/extend/{db}/{region}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @ResourceFilters(StaashAuditFilter.class)
-    public String extendDB(String db, String region) {
-        return metasvc.extenddb(db, region).toString();
-    }
 }
