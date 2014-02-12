@@ -50,7 +50,7 @@ public class TestPaasPropertiesModule extends AbstractModule {
     private static Properties loadProperties() throws Exception {
         Properties properties = new Properties();
         ClassLoader loader = TestPaasPropertiesModule.class.getClassLoader();
-        URL url = loader.getResource("paas.properties");
+        URL url = loader.getResource("staash.properties");
         properties.load(url.openStream());
         return properties;
     }

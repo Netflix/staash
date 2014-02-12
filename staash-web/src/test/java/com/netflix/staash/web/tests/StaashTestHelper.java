@@ -66,8 +66,7 @@ public class StaashTestHelper {
             e.printStackTrace();
         }
     }
-    public static void createTestTimeSeries(MetaService metasvc) {
-    	String tblpay = "{\"name\":\"timeseries1\",\"periodicity\":\"10000\",\"prefix\":\"server1\",\"storage\":\"cassandratest\"}";
+    public static void createTestTimeSeries(MetaService metasvc, String tblpay) {
         JsonObject pload = new JsonObject(tblpay);
         pload.putString("db", db);
         try {
@@ -81,5 +80,18 @@ public class StaashTestHelper {
     }
     public static void readEvent() {
     	
+    }
+    
+    /*
+     * Table Test
+     */
+    public static void createTestTable(MetaService metasvc, String tblpay) {
+        JsonObject pload = new JsonObject(tblpay);
+        pload.putString("db", db);
+        try {
+            metasvc.writeMetaEntity(EntityType.TABLE, pload.toString());
+        } catch (StorageDoesNotExistException e) {
+            e.printStackTrace();
+        }
     }
 }

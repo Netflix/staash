@@ -44,11 +44,11 @@ import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/data")
-public class PaasDataResourceImplNew {
+public class PaasDataResourceImpl {
 	private DataService datasvc;
 
 	@Inject
-	public PaasDataResourceImplNew(DataService data) {
+	public PaasDataResourceImpl(DataService data) {
 		this.datasvc = data;
 	}
 	
@@ -176,12 +176,19 @@ public class PaasDataResourceImplNew {
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@FormDataParam("value") FormDataContentDisposition fileDetail) {
 //		writeToKVStore(uploadedInputStream, fileDetail.getFileName());
-		writeToChunkedKVStore(fileDetail.getFileName(), uploadedInputStream);
-		return "success";
+		try {
+			writeToChunkedKVStore(fileDetail.getFileName(), uploadedInputStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "file could not be uploaded";
+		}
+		return "file successfully uploaded";
 
 	}
 	
-	private void writeToChunkedKVStore(String objectName, InputStream is) {
+	private void writeToChunkedKVStore(String objectName, InputStream is) throws IOException {
+		InputStream input = null;
 		try {
 			String uploadedFileLocation = "/tmp/" + objectName;
 			OutputStream out = new FileOutputStream(new File(
@@ -202,11 +209,13 @@ public class PaasDataResourceImplNew {
 			if (fbytes!=null && fbytes.length>StaashConstants.MAX_FILE_UPLOAD_SIZE_IN_KB*1000) {
 				throw new RuntimeException("File is too large to upload, max size supported is 2MB");
 			}
-			InputStream input = new FileInputStream(new File(uploadedFileLocation));
+			input = new FileInputStream(new File(uploadedFileLocation));
 			datasvc.writeChunked("kvstore", "kvmap", objectName, input);
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage());
-		} 
+		} finally {
+			if (input!=null) input.close();
+		}
 	}
 //
 //	private void writeToKVStore(InputStream uploadedInputStream,

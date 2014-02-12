@@ -1,6 +1,7 @@
 package com.netflix.staash.web.tests;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.google.inject.Guice;
@@ -16,19 +17,21 @@ import com.netflix.staash.test.core.CassandraRunner;
 //@SuppressWarnings({ "rawtypes", "unchecked" })
 @RunWith(CassandraRunner.class)
 public class TimeSeriesTest {
-	PaasMetaService metasvc;
-    PaasDataService datasvc;
-    public static final String db = "testdb";
+	public static PaasMetaService metasvc;
+    public static PaasDataService datasvc;
+    public static final String db = "unitdb1";
     public static final String timeseries = "testtimeseries1";
-	@Before
-	public void setup() {
+	public static String timeseriespay = "{\"name\":\"timeseries1\",\"periodicity\":\"10000\",\"prefix\":\"server1\",\"storage\":\"cassandratest\"}";
+	
+	@BeforeClass
+	public static void setup() {
 		TestStaashModule pmod = new TestStaashModule();
         Injector inj = Guice.createInjector(pmod);
         metasvc = inj.getInstance(PaasMetaService.class);
         datasvc = inj.getInstance(PaasDataService.class);
         StaashTestHelper.createTestStorage(metasvc);
         StaashTestHelper.createTestDB(metasvc);
-        StaashTestHelper.createTestTimeSeries(metasvc);
+        StaashTestHelper.createTestTimeSeries(metasvc, timeseriespay);
         System.out.println("Done:");
 	}
 	@Test
@@ -39,10 +42,10 @@ public class TimeSeriesTest {
         StaashTestHelper.writeEvent(datasvc, new JsonObject(payload1));
         StaashTestHelper.writeEvent(datasvc, new JsonObject(payload2));
         StaashTestHelper.writeEvent(datasvc, new JsonObject(payload3));
-        testTimeSeriesRead();
+        readTimeSeries();
 	}
 	
-	private void testTimeSeriesRead() {
+	private void readTimeSeries() {
         String db = "unitdb1";
         String table = "timeseries1";
         String out = "";
