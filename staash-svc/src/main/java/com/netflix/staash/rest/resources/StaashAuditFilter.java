@@ -45,6 +45,9 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		
 		StaashRequestContext.resetRequestContext();
 		
+		StaashRequestContext.recordRequestStart();
+		StaashRequestContext.logDate();
+
 		StaashRequestContext.addContext("PATH", cReq.getPath(true));
 		StaashRequestContext.addContext("METHOD", cReq.getMethod());
 
@@ -62,8 +65,9 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		Logger.info("StaashAuditFilter POST");
 		
 		StaashRequestContext.addContext("STATUS", String.valueOf(response.getStatus()));
-
+		StaashRequestContext.recordRequestEnd();
 		StaashRequestContext.flushRequestContext();
+		
 		return response;
 	}
 	
