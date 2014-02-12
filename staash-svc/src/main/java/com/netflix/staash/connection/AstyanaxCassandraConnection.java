@@ -21,10 +21,8 @@ package com.netflix.staash.connection;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.cassandra.utils.Hex;
 import org.apache.log4j.Logger;
 import com.google.common.collect.ImmutableMap;
 import com.netflix.astyanax.AstyanaxContext;

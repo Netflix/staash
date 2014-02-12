@@ -20,7 +20,6 @@
 package com.netflix.staash.rest.resources;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -35,10 +34,10 @@ import com.netflix.staash.service.MetaService;
 import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/admin")
-public class PaasAdminResourceImplNew {
+public class PaasAdminResourceImpl {
     private MetaService metasvc;
     @Inject
-    public PaasAdminResourceImplNew(MetaService meta) {
+    public PaasAdminResourceImpl(MetaService meta) {
         this.metasvc = meta;
     }
 
@@ -106,13 +105,6 @@ public class PaasAdminResourceImplNew {
         }
         JsonObject obj = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
         return obj.toString();
-    }
-
-    @DELETE
-    @Path("{schema}")
-    @ResourceFilters(StaashAuditFilter.class)
-    public void deleteSchema(@PathParam("schema") String schemaName) {
-        
     }
 
         
