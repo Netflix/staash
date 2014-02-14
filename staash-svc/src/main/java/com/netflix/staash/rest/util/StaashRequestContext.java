@@ -1,5 +1,6 @@
 package com.netflix.staash.rest.util;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -55,12 +56,17 @@ public class StaashRequestContext {
 		Long now = System.currentTimeMillis();
 		requestContext.get().addContextToMap("Duration", String.valueOf(now - begin));
 	}
-
+	
+	public static String getRequestId() {
+		return requestContext.get().requestId;
+	}
+	
 	private final ConcurrentHashMap<String, String> map = new ConcurrentHashMap<String, String>();
 	private final AtomicLong startTime = new AtomicLong(0L);
+	private final String requestId = UUID.randomUUID().toString();
 	
 	private StaashRequestContext() {
-		
+		map.put("request-id", requestId);
 	}
 	
 	private void addContextToMap(String key, String value) {
@@ -86,5 +92,4 @@ public class StaashRequestContext {
 		
 		return sb.toString();
 	}
-
 }
