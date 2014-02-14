@@ -6,11 +6,14 @@ import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.netflix.staash.json.JsonObject;
 import com.netflix.staash.rest.util.StaashRequestContext;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -68,9 +71,43 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		StaashRequestContext.recordRequestEnd();
 		StaashRequestContext.flushRequestContext();
 		
+		// Add RequestId to response
+		addRequestIdToResponse(response);
+		
 		return response;
 	}
 	
+	/**
+	 * Private helper that adds the request-id to the response payload.
+	 * @param response
+	 */
+	private void addRequestIdToResponse(ContainerResponse response) {
+		
+		// The request-id to be injected in the response
+		String requestId = StaashRequestContext.getRequestId();
+		
+		// The key response attributes
+		int status = response.getStatus();
+		MediaType mediaType = response.getMediaType();
+		String message = (String)response.getEntity();
+		
+		Response newJerseyResponse = null;
+		
+		if (mediaType.equals(MediaType.APPLICATION_JSON_TYPE)) {
+			
+			JsonObject json = new JsonObject(message);
+			json.putString("request-id", requestId);
+			
+			 newJerseyResponse = Response.status(status).type(mediaType).entity(json.toString()).build();
+			 
+		} else {
+			
+			message = message + ", request-id: " + requestId; 
+			newJerseyResponse = Response.status(status).type(mediaType).entity(message).build();
+		}
+		
+		response.setResponse(newJerseyResponse);
+	}
 	
 	private void addRequestHeaders(ContainerRequest cReq) {
 		
