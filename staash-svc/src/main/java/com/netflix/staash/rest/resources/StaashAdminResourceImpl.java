@@ -34,10 +34,10 @@ import com.netflix.staash.service.MetaService;
 import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/admin")
-public class PaasAdminResourceImpl {
+public class StaashAdminResourceImpl {
     private MetaService metasvc;
     @Inject
-    public PaasAdminResourceImpl(MetaService meta) {
+    public StaashAdminResourceImpl(MetaService meta) {
         this.metasvc = meta;
     }
 

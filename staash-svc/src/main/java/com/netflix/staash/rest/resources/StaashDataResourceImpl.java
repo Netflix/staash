@@ -44,11 +44,11 @@ import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/data")
-public class PaasDataResourceImpl {
+public class StaashDataResourceImpl {
 	private DataService datasvc;
 
 	@Inject
-	public PaasDataResourceImpl(DataService data) {
+	public StaashDataResourceImpl(DataService data) {
 		this.datasvc = data;
 	}
 	
@@ -160,7 +160,6 @@ public class PaasDataResourceImpl {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
     @ResourceFilters(StaashAuditFilter.class)
 	public byte[] getObject(@PathParam("key") String key) {
-//		byte[] value = datasvc.fetchValueForKey("kvstore", "kvmap", "key", key);
 		byte[] value = datasvc.readChunked("kvstore", "kvmap", key);
 		StaashRequestContext.addContext("N-BYTES", String.valueOf(value.length));
 		return value;
@@ -170,21 +169,18 @@ public class PaasDataResourceImpl {
 	@POST
 	@Path("/kvstore")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
     @ResourceFilters(StaashAuditFilter.class)
 	public String storeFile(
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@FormDataParam("value") FormDataContentDisposition fileDetail) {
-//		writeToKVStore(uploadedInputStream, fileDetail.getFileName());
 		try {
 			writeToChunkedKVStore(fileDetail.getFileName(), uploadedInputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return "file could not be uploaded";
+			return "{\"msg\":\"file could not be uploaded\"}";
 		}
-		return "file successfully uploaded";
-
+		return "{\"msg\":\"file successfully uploaded\"}";
 	}
 	
 	private void writeToChunkedKVStore(String objectName, InputStream is) throws IOException {

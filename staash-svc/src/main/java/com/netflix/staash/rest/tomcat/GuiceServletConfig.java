@@ -24,8 +24,8 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.netflix.governator.guice.LifecycleInjector;
 import com.netflix.staash.cassandra.discovery.EurekaModule;
 import com.netflix.staash.rest.modules.PaasPropertiesModule;
-import com.netflix.staash.rest.resources.PaasAdminResourceImpl;
-import com.netflix.staash.rest.resources.PaasDataResourceImpl;
+import com.netflix.staash.rest.resources.StaashAdminResourceImpl;
+import com.netflix.staash.rest.resources.StaashDataResourceImpl;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
@@ -40,8 +40,8 @@ public class GuiceServletConfig extends GuiceServletContextListener {
                         @Override
                         protected void configureServlets() {
                             bind(GuiceContainer.class).asEagerSingleton();
-                            bind(PaasAdminResourceImpl.class);
-                            bind(PaasDataResourceImpl.class);
+                            bind(StaashAdminResourceImpl.class);
+                            bind(StaashDataResourceImpl.class);
                             serve("/*").with(GuiceContainer.class);
                         }
                     }
