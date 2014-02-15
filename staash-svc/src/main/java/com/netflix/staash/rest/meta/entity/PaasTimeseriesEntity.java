@@ -35,7 +35,7 @@ public class PaasTimeseriesEntity extends Entity{
         private PaasTimeseriesEntity entity = new PaasTimeseriesEntity();
         
         public Builder withJsonPayLoad(JsonObject payLoad, String schemaName) {
-            entity.setRowKey(MetaConstants.PAAS_TS_ENTITY_TYPE);
+            entity.setRowKey(MetaConstants.STAASH_TS_ENTITY_TYPE);
             entity.setSchemaName(schemaName);
             String payLoadName = payLoad.getString("name");
             entity.setName(schemaName+"."+payLoadName);

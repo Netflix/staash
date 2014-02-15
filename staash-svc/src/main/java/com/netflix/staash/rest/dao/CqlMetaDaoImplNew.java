@@ -273,11 +273,11 @@ public class CqlMetaDaoImplNew implements MetaDao {
         ResultSet rs;
         if (col!=null && !col.equals("*")) {
             rs = session
-                .execute("select column1, value from paasmetaks.metacf where key='"+key+"' and column1='"+col+"';");
+                .execute("select column1, value from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='"+key+"' and column1='"+col+"';");
         }
         else {
             rs = session
-                    .execute("select column1, value from paasmetaks.metacf where key='"+key+"';");
+                    .execute("select column1, value from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='"+key+"';");
         }
         List<Row> rows = rs.all();
         Map<String,JsonObject> storageMap = new HashMap<String,JsonObject>();

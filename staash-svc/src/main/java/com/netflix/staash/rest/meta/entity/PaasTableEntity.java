@@ -36,7 +36,7 @@ public class PaasTableEntity extends Entity{
         private PaasTableEntity entity = new PaasTableEntity();
         
         public Builder withJsonPayLoad(JsonObject payLoad, String schemaName) {
-            entity.setRowKey(MetaConstants.PAAS_TABLE_ENTITY_TYPE);
+            entity.setRowKey(MetaConstants.STAASH_TABLE_ENTITY_TYPE);
             entity.setSchemaName(schemaName);
             String payLoadName = payLoad.getString("name");
             String load = payLoad.toString();

@@ -53,7 +53,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 					"us-east:3");
 
 	static ColumnFamily<String, String> METACF = ColumnFamily.newColumnFamily(
-			"metacf", StringSerializer.get(), StringSerializer.get());
+			MetaConstants.META_COLUMN_FAMILY, StringSerializer.get(), StringSerializer.get());
 
 	@Inject
 	public AstyanaxMetaDaoImpl(@Named("astmetaks") Keyspace keyspace) {
@@ -65,7 +65,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 					"keyspace already existed");
 		} catch (ConnectionException ex) {
 			StaashRequestContext.addContext("Meta_Init",
-					"Keyspace did not exist , creating keyspace paasmetaks"
+					"Keyspace did not exist , creating keyspace "+MetaConstants.META_KEY_SPACE
 							);
 			maybecreateschema();
 		}
@@ -114,7 +114,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 						.put("strategy_class", METASTRATEGY).build());
 			}
 			StaashRequestContext.addContext("Meta_Init",
-					"Keyspace did not exist , created keyspace paasmetaks with rf:"
+					"Keyspace did not exist , created keyspace "+MetaConstants.META_KEY_SPACE +" with rf:"
 							+ METARF.getValue());
 		} catch (ConnectionException e) {
 			// If we are here that means the meta artifacts already exist
@@ -124,14 +124,14 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 		}
 
 		try {
-			String metaDynamic = "CREATE TABLE metacf (\n" + "    key text,\n"
+			String metaDynamic = "CREATE TABLE " + MetaConstants.META_COLUMN_FAMILY +"(\n" + "    key text,\n"
 					+ "    column1 text,\n" + "    value text,\n"
 					+ "    PRIMARY KEY (key, column1)\n"
 					+ ") WITH COMPACT STORAGE;";
 			keyspace.prepareCqlStatement().withCql(metaDynamic).execute();
 			StaashRequestContext
 					.addContext("Meta_Init",
-							"Columnfamily did not exist , created keyspace metacf in paasmetaks ");
+							"Columnfamily did not exist , created column family "+MetaConstants.META_COLUMN_FAMILY + " in keyspace "+MetaConstants.META_KEY_SPACE);
 		} catch (ConnectionException e) {
 			// if we are here means meta artifacts already exists, ignore
 			logger.info("staash column family exists");
@@ -142,7 +142,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 
 	public String writeMetaEntity(Entity entity) {
 		try {
-			String stmt = String.format(PaasUtils.INSERT_FORMAT, "paasmetaks"
+			String stmt = String.format(PaasUtils.INSERT_FORMAT, MetaConstants.META_KEY_SPACE
 					+ "." + MetaConstants.META_COLUMN_FAMILY,
 					entity.getRowKey(), entity.getName(), entity.getPayLoad());
 			keyspace.prepareCqlStatement().withCql(stmt).execute();
@@ -165,10 +165,10 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 		try {
 			String queryStr = "";
 			if (col != null && !col.equals("*")) {
-				queryStr = "select column1, value from paasmetaks.metacf where key='"
+				queryStr = "select column1, value from "+MetaConstants.META_KEY_SPACE + "." + MetaConstants.META_COLUMN_FAMILY +" where key='"
 						+ key + "' and column1='" + col + "';";
 			} else {
-				queryStr = "select column1, value from paasmetaks.metacf where key='"
+				queryStr = "select column1, value from "+MetaConstants.META_KEY_SPACE + "." + MetaConstants.META_COLUMN_FAMILY +" where key='"
 						+ key + "';";
 			}
 			rs = keyspace.prepareCqlStatement().withCql(queryStr).execute();

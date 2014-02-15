@@ -30,6 +30,7 @@ import com.netflix.staash.rest.dao.CqlMetaDaoImplNew;
 import com.netflix.staash.rest.dao.DataDao;
 import com.netflix.staash.rest.dao.MetaDao;
 import com.netflix.staash.rest.util.HostSupplier;
+import com.netflix.staash.rest.util.MetaConstants;
 import com.netflix.staash.service.CacheService;
 import com.netflix.staash.service.DataService;
 import com.netflix.staash.service.MetaService;
@@ -50,7 +51,7 @@ public class TestPaasPropertiesModule extends AbstractModule {
     private static Properties loadProperties() throws Exception {
         Properties properties = new Properties();
         ClassLoader loader = TestPaasPropertiesModule.class.getClassLoader();
-        URL url = loader.getResource("staash.properties");
+        URL url = loader.getResource("paas.properties");
         properties.load(url.openStream());
         return properties;
     }
@@ -84,7 +85,7 @@ public class TestPaasPropertiesModule extends AbstractModule {
 //        hs = new EurekaAstyanaxHostSupplier();
         AstyanaxContext<Keyspace> keyspaceContext = new AstyanaxContext.Builder()
         .forCluster(clusterNameOnly)
-        .forKeyspace("paasmetaks")
+        .forKeyspace(MetaConstants.META_KEY_SPACE)
         .withAstyanaxConfiguration(
                 new AstyanaxConfigurationImpl()
                         .setDiscoveryType(
@@ -97,7 +98,7 @@ public class TestPaasPropertiesModule extends AbstractModule {
 //                        .withHostSupplier(hs.getSupplier(clustername))
         .withConnectionPoolConfiguration(
                 new ConnectionPoolConfigurationImpl(clusterNameOnly
-                        + "_" + "paasmetaks")
+                        + "_" + MetaConstants.META_KEY_SPACE)
                         .setSocketTimeout(3000)
                         .setMaxTimeoutWhenExhausted(2000)
                         .setMaxConnsPerHost(3).setInitConnsPerHost(1)

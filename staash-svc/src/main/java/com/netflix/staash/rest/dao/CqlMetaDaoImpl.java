@@ -77,7 +77,7 @@ public class CqlMetaDaoImpl implements MetaDao {
     }
     private void LoadTableToStorage() {
         ResultSet rs = session
-                .execute("select column1, value from paasmetaks.metacf where key='"+MetaConstants.PAAS_TABLE_ENTITY_TYPE+"';");
+                .execute("select column1, value from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='"+MetaConstants.STAASH_TABLE_ENTITY_TYPE+"';");
         List<Row> rows = rs.all();
         for (Row row : rows) {
             String field = row.getString(0);
@@ -88,7 +88,7 @@ public class CqlMetaDaoImpl implements MetaDao {
     }
     public  Map<String,JsonObject> LoadStorage() {
         ResultSet rs = session
-                .execute("select column1, value from paasmetaks.metacf where key='"+MetaConstants.PAAS_STORAGE_TYPE_ENTITY+"';");
+                .execute("select column1, value from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='"+MetaConstants.STAASH_STORAGE_TYPE_ENTITY+"';");
         List<Row> rows = rs.all();
         Map<String,JsonObject> storageMap = new HashMap<String,JsonObject>();
         for (Row row : rows) {
@@ -102,7 +102,7 @@ public class CqlMetaDaoImpl implements MetaDao {
 
     private void LoadDbNames() {
         ResultSet rs = session
-                .execute("select column1 from paasmetaks.metacf where key='com.test.entity.type.paas.db';");
+                .execute("select column1 from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='com.test.entity.type.paas.db';");
         List<Row> rows = rs.all();
         for (Row row : rows) {
             dbHolder.add(row.getString(0));
@@ -110,7 +110,7 @@ public class CqlMetaDaoImpl implements MetaDao {
     }
     private void LoadDbToTableMap() {
         ResultSet rs = session
-                .execute("select column1 from paasmetaks.metacf where key='com.test.entity.type.paas.table';");
+                .execute("select column1 from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='com.test.entity.type.paas.table';");
         List<Row> rows = rs.all();
         for (Row row : rows) {
             String key = row.getString(0).split("\\.")[0];
@@ -126,7 +126,7 @@ public class CqlMetaDaoImpl implements MetaDao {
     }
     private void LoadDbToTimeSeriesMap() {
         ResultSet rs = session
-                .execute("select column1 from paasmetaks.metacf where key='com.test.entity.type.paas.timeseries';");
+                .execute("select column1 from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='com.test.entity.type.paas.timeseries';");
         List<Row> rows = rs.all();
         for (Row row : rows) {
             String key = row.getString(0).split("\\.")[0];
@@ -141,8 +141,8 @@ public class CqlMetaDaoImpl implements MetaDao {
         } 
     }
     public String writeMetaEntityOnly(Entity entity) {
-        session.execute(String.format(PaasUtils.INSERT_FORMAT, metaks + "."
-                + metacf, entity.getRowKey(), entity.getName(),
+        session.execute(String.format(PaasUtils.INSERT_FORMAT, MetaConstants.META_KEY_SPACE + "."
+                + MetaConstants.META_COLUMN_FAMILY, entity.getRowKey(), entity.getName(),
                 entity.getPayLoad()));
         return "ok";
     }
@@ -155,8 +155,8 @@ public class CqlMetaDaoImpl implements MetaDao {
                         "{\"status\":\"error\",\"message\":\"db names must be unique\"}");
                 return obj.toString();
             }
-            session.execute(String.format(PaasUtils.INSERT_FORMAT, metaks + "."
-                    + metacf, entity.getRowKey(), entity.getName(),
+            session.execute(String.format(PaasUtils.INSERT_FORMAT, MetaConstants.META_KEY_SPACE + "."
+                    + MetaConstants.META_COLUMN_FAMILY, entity.getRowKey(), entity.getName(),
                     entity.getPayLoad()));
             if (entity instanceof PaasDBEntity) dbHolder.add(entity.getName());
             if (entity instanceof PaasStorageEntity) jsonStorage.putObject(entity.getName(), new JsonObject(entity.getPayLoad()));
@@ -428,7 +428,7 @@ public class CqlMetaDaoImpl implements MetaDao {
     public Map<String, JsonObject> runQuery(String key, String col) {
         // TODO Auto-generated method stub
         ResultSet rs = session
-                .execute("select column1, value from paasmetaks.metacf where key='"+key+"' and column1='"+col+"';");
+                .execute("select column1, value from "+MetaConstants.META_KEY_SPACE+"."+MetaConstants.META_COLUMN_FAMILY+ " where key='"+key+"' and column1='"+col+"';");
         List<Row> rows = rs.all();
         Map<String,JsonObject> storageMap = new HashMap<String,JsonObject>();
         for (Row row : rows) {
