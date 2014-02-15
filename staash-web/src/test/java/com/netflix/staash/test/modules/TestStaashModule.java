@@ -17,6 +17,7 @@ import com.netflix.staash.connection.ConnectionFactory;
 import com.netflix.staash.connection.PaasConnectionFactory;
 import com.netflix.staash.rest.dao.AstyanaxMetaDaoImpl;
 import com.netflix.staash.rest.dao.MetaDao;
+import com.netflix.staash.rest.util.MetaConstants;
 import com.netflix.staash.service.CacheService;
 import com.netflix.staash.service.DataService;
 import com.netflix.staash.service.MetaService;
@@ -30,7 +31,7 @@ public class TestStaashModule extends AbstractModule {
     Keyspace provideKeyspace() {
          AstyanaxContext<Keyspace> keyspaceContext = new AstyanaxContext.Builder()
         .forCluster("test cluster")
-        .forKeyspace("paasmetaks")
+        .forKeyspace(MetaConstants.META_KEY_SPACE)
         .withAstyanaxConfiguration(
                 new AstyanaxConfigurationImpl()
                         .setDiscoveryType(
@@ -42,7 +43,7 @@ public class TestStaashModule extends AbstractModule {
 //                        .withHostSupplier(hs.getSupplier(clustername))
         .withConnectionPoolConfiguration(
                 new ConnectionPoolConfigurationImpl("localpool"
-                        + "_" + "paasmetaks")
+                        + "_" + MetaConstants.META_KEY_SPACE)
                         .setSocketTimeout(30000)
                         .setMaxTimeoutWhenExhausted(20000)
                         .setMaxConnsPerHost(3).setInitConnsPerHost(1)

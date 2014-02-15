@@ -51,7 +51,7 @@ public class CacheService {
 
     private void LoadTableMaps() {
         Map<String, JsonObject> tblmap = meta.runQuery(
-                MetaConstants.PAAS_TABLE_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TABLE_ENTITY_TYPE, "*");
         for (String tableName : tblmap.keySet()) {
             JsonObject tblPay = tblmap.get(tableName);
             String storage = tblPay.getString("storage");
@@ -69,12 +69,12 @@ public class CacheService {
     }
 
     public void LoadStorage() {
-        storageMap = meta.runQuery(MetaConstants.PAAS_STORAGE_TYPE_ENTITY, "*");
+        storageMap = meta.runQuery(MetaConstants.STAASH_STORAGE_TYPE_ENTITY, "*");
     }
 
     private void LoadDbNames() {
         Map<String, JsonObject> dbmap = meta.runQuery(
-                MetaConstants.PAAS_DB_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_DB_ENTITY_TYPE, "*");
         for (String key : dbmap.keySet()) {
             dbHolder.add(key);
         }
@@ -82,7 +82,7 @@ public class CacheService {
 
     private void LoadDbToTimeSeriesMap() {
         Map<String, JsonObject> tblmap = meta.runQuery(
-                MetaConstants.PAAS_TS_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TS_ENTITY_TYPE, "*");
         for (String tableName : tblmap.keySet()) {
             JsonObject tblPay = tblmap.get(tableName);
             String storage = tblPay.getString("storage");
@@ -135,7 +135,7 @@ public class CacheService {
     // }
     public boolean checkUniqueDbName(String dbName) {
 //        return dbHolder.contains(dbName);
-        Map<String,JsonObject> names = meta.runQuery(MetaConstants.PAAS_DB_ENTITY_TYPE, dbName);
+        Map<String,JsonObject> names = meta.runQuery(MetaConstants.STAASH_DB_ENTITY_TYPE, dbName);
         if (names!=null && !names.isEmpty())
             return names.containsKey(dbName);
         else
@@ -144,7 +144,7 @@ public class CacheService {
 
     public List<String> getDbNames() {
 //        return dbHolder;
-        Map<String,JsonObject> dbmap = meta.runQuery(MetaConstants.PAAS_DB_ENTITY_TYPE, "*");
+        Map<String,JsonObject> dbmap = meta.runQuery(MetaConstants.STAASH_DB_ENTITY_TYPE, "*");
         List<String> dbNames = new ArrayList<String>();
         for (String key : dbmap.keySet()) {
             dbNames.add(key);
@@ -154,7 +154,7 @@ public class CacheService {
 
     public List<String> getTableNames(String db) {
         Map<String, JsonObject> tblmap = meta.runQuery(
-                MetaConstants.PAAS_TABLE_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TABLE_ENTITY_TYPE, "*");
         List<String> tableNames = new ArrayList<String>();
         for (String tableName : tblmap.keySet()) {
             if (tableName.startsWith(db+".")) {
@@ -167,7 +167,7 @@ public class CacheService {
 
     public Set<String> getStorageNames() {
 //        return storageMap.keySet();
-        Map<String, JsonObject> storages = meta.runQuery(MetaConstants.PAAS_STORAGE_TYPE_ENTITY, "*");
+        Map<String, JsonObject> storages = meta.runQuery(MetaConstants.STAASH_STORAGE_TYPE_ENTITY, "*");
         if (storages != null)
           return storages.keySet();
         else 
@@ -176,7 +176,7 @@ public class CacheService {
 
     public JsonObject getStorage(String storage) {
 //        return storageMap.get(storage);
-        Map<String, JsonObject> storages = meta.runQuery(MetaConstants.PAAS_STORAGE_TYPE_ENTITY, "*");
+        Map<String, JsonObject> storages = meta.runQuery(MetaConstants.STAASH_STORAGE_TYPE_ENTITY, "*");
         if (storages != null)
           return storages.get(storage);
         else 
@@ -186,7 +186,7 @@ public class CacheService {
     public List<String> getSeriesNames(String db) {
 //        return dbToTimeseriesMap.get(db);
         Map<String, JsonObject> tblmap = meta.runQuery(
-                MetaConstants.PAAS_TS_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TS_ENTITY_TYPE, "*");
         List<String> tableNames = new ArrayList<String>();
         for (String tableName : tblmap.keySet()) {
             if (tableName.startsWith(db+".")) {
@@ -240,7 +240,7 @@ public class CacheService {
 
     public JsonObject getStorageForTable(String tableParam) {
         Map<String, JsonObject> tblmap = meta.runQuery(
-                MetaConstants.PAAS_TABLE_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TABLE_ENTITY_TYPE, "*");
         List<String> tableNames = new ArrayList<String>();
         for (String tableName : tblmap.keySet()) {
             if (tableName.equals(tableParam)) {
@@ -250,7 +250,7 @@ public class CacheService {
             }
         }
         tblmap = meta.runQuery(
-                MetaConstants.PAAS_TS_ENTITY_TYPE, "*");
+                MetaConstants.STAASH_TS_ENTITY_TYPE, "*");
         tableNames = new ArrayList<String>();
         for (String tableName : tblmap.keySet()) {
             if (tableName.equals(tableParam)) {

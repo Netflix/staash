@@ -27,7 +27,7 @@ public class PaasStorageEntity extends Entity{
         private PaasStorageEntity entity = new PaasStorageEntity();
         
         public Builder withJsonPayLoad(JsonObject payLoad) {
-            entity.setRowKey(MetaConstants.PAAS_STORAGE_TYPE_ENTITY);
+            entity.setRowKey(MetaConstants.STAASH_STORAGE_TYPE_ENTITY);
             String payLoadName = payLoad.getString("name");
             String load = payLoad.toString();
             entity.setName(payLoadName);

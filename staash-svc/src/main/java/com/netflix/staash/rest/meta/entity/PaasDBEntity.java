@@ -29,7 +29,7 @@ public class PaasDBEntity extends Entity{
         private PaasDBEntity entity = new PaasDBEntity();
         
         public Builder withJsonPayLoad(JsonObject payLoad) {
-            entity.setRowKey(MetaConstants.PAAS_DB_ENTITY_TYPE);
+            entity.setRowKey(MetaConstants.STAASH_DB_ENTITY_TYPE);
             String payLoadName = payLoad.getString("name");
             String load = payLoad.toString();
             entity.setName(payLoadName);
