@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.netflix.astyanax.Keyspace;
@@ -72,15 +73,14 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 	}
 
 	private Map<String, Object> populateMap() {
-		Map<String, Object> rfMap = ImmutableMap.<String, Object> builder()
-				.build();
+		Builder<String, Object> rfMap = ImmutableMap.<String, Object> builder();
 		String rfStr = METARF.getValue();
 		String[] pairs = rfStr.split(",");
 		for (String pair : pairs) {
 			String[] kv = pair.split(":");
 			rfMap.put(kv[0], kv[1]);
 		}
-		return rfMap;
+		return rfMap.build();
 	}
 
 	private void maybecreateschema() {
