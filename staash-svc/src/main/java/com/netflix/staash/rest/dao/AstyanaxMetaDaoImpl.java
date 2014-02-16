@@ -111,7 +111,7 @@ public class AstyanaxMetaDaoImpl implements MetaDao {
 				// .put("strategy_class", METASTRATEGY).build());
 				keyspace.createKeyspace(ImmutableMap.<String, Object> builder()
 						.put("strategy_options", populateMap())
-						.put("strategy_class", METASTRATEGY).build());
+						.put("strategy_class", METASTRATEGY.getValue()).build());
 			}
 			StaashRequestContext.addContext("Meta_Init",
 					"Keyspace did not exist , created keyspace "+MetaConstants.META_KEY_SPACE +" with rf:"
