@@ -91,22 +91,18 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		MediaType mediaType = response.getMediaType();
 		String message = (String)response.getEntity();
 		
-		Response newJerseyResponse = null;
-		
 		if (mediaType.equals(MediaType.APPLICATION_JSON_TYPE)) {
 			
 			JsonObject json = new JsonObject(message);
 			json.putString("request-id", requestId);
 			
-			 newJerseyResponse = Response.status(status).type(mediaType).entity(json.toString()).build();
-			 
-		} else {
-			
-			message = message + ", request-id: " + requestId; 
-			newJerseyResponse = Response.status(status).type(mediaType).entity(message).build();
+			Response newJerseyResponse = Response.status(status).type(mediaType).entity(json.toString()).build();
+			response.setResponse(newJerseyResponse);
 		}
-		
-		response.setResponse(newJerseyResponse);
+			
+		// Add the request id to the response regardless of the media type, 
+		// this allows non json responses to have a request id in the response
+		response.getHttpHeaders().add("x-nflx-staash-request-id", requestId);
 	}
 	
 	private void addRequestHeaders(ContainerRequest cReq) {
