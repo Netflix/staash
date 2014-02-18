@@ -182,6 +182,22 @@ public class StaashDataResourceImpl {
 		}
 		return "{\"msg\":\"file successfully uploaded\"}";
 	}
+	@POST
+	@Path("/kvstore/name/{name}")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+    @ResourceFilters(StaashAuditFilter.class)
+	public String storeNamedFile(
+			@FormDataParam("value") InputStream uploadedInputStream,
+			@PathParam("name") String name) {
+		try {
+			writeToChunkedKVStore(name, uploadedInputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "{\"msg\":\"file could not be uploaded\"}";
+		}
+		return "{\"msg\":\"file successfully uploaded\"}";
+	}
 	
 	private void writeToChunkedKVStore(String objectName, InputStream is) throws IOException {
 		InputStream input = null;

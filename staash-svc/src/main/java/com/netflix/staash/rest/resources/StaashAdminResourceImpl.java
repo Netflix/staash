@@ -43,6 +43,7 @@ public class StaashAdminResourceImpl {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/db")
     @ResourceFilters(StaashAuditFilter.class)
     public String listSchemas() {
         String schemas = metasvc.listSchemas();
@@ -59,7 +60,7 @@ public class StaashAdminResourceImpl {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{schema}")
+    @Path("/db/{schema}")
     @ResourceFilters(StaashAuditFilter.class)
     public String listTables(@PathParam("schema") String schema) {
         String schemas = metasvc.listTablesInSchema(schema);
@@ -78,6 +79,7 @@ public class StaashAdminResourceImpl {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/db")
     @ResourceFilters(StaashAuditFilter.class)
     public String createSchema(String payLoad) {
         if (payLoad!=null) {
