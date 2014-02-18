@@ -89,10 +89,10 @@ public class StaashAuditFilter implements ResourceFilter, ContainerRequestFilter
 		// The key response attributes
 		int status = response.getStatus();
 		MediaType mediaType = response.getMediaType();
-		String message = (String)response.getEntity();
 		
 		if (mediaType.equals(MediaType.APPLICATION_JSON_TYPE)) {
 			
+			String message = (String)response.getEntity();
 			JsonObject json = new JsonObject(message);
 			json.putString("request-id", requestId);
 			
