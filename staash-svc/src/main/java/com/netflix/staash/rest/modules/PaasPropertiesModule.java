@@ -90,14 +90,11 @@ public class PaasPropertiesModule extends AbstractModule {
     @Named("astmetaks")
     Keyspace provideKeyspace(@Named("staash.metacluster") String clustername,EurekaAstyanaxHostSupplier hs) {
         String clusterNameOnly = "";
-        String clusterPortOnly = "";
         String[] clusterinfo = clustername.split(":");
         if (clusterinfo != null && clusterinfo.length == 2) {
             clusterNameOnly = clusterinfo[0];
-            clusterPortOnly = clusterinfo[1];
         } else {
             clusterNameOnly = clustername;
-            clusterPortOnly = "9160";
         }
         AstyanaxContext<Keyspace> keyspaceContext = new AstyanaxContext.Builder()
         .forCluster(clusterNameOnly)
@@ -108,17 +105,16 @@ public class PaasPropertiesModule extends AbstractModule {
                                 NodeDiscoveryType.RING_DESCRIBE)
                         .setConnectionPoolType(
                                 ConnectionPoolType.TOKEN_AWARE)
-                        .setDiscoveryDelayInSeconds(60000)
+                        .setDiscoveryDelayInSeconds(60)
                         .setTargetCassandraVersion("1.2")
                         .setCqlVersion("3.0.0"))
                         .withHostSupplier(hs.getSupplier(clustername))
         .withConnectionPoolConfiguration(
                 new ConnectionPoolConfigurationImpl(clusterNameOnly
                         + "_" + MetaConstants.META_KEY_SPACE)
-                        .setSocketTimeout(3000)
-                        .setMaxTimeoutWhenExhausted(2000)
-                        .setMaxConnsPerHost(3).setInitConnsPerHost(1))
-                        //.setSeeds(clusterNameOnly+":"+clusterPortOnly))
+                        .setSocketTimeout(11000)
+                        .setConnectTimeout(2000)
+                        .setMaxConnsPerHost(10).setInitConnsPerHost(3))
         .withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
         .buildKeyspace(ThriftFamilyFactory.getInstance());
         keyspaceContext.start();

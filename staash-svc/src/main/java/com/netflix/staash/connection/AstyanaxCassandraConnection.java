@@ -78,15 +78,16 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 										NodeDiscoveryType.DISCOVERY_SERVICE)
 								.setConnectionPoolType(
 										ConnectionPoolType.TOKEN_AWARE)
-								.setDiscoveryDelayInSeconds(60000)
+								.setDiscoveryDelayInSeconds(60)
 								.setTargetCassandraVersion("1.2")
 								.setCqlVersion("3.0.0"))
 				.withHostSupplier(supplier.getSupplier(clustername))
 				.withConnectionPoolConfiguration(
 						new ConnectionPoolConfigurationImpl(clusterNameOnly
-								+ "_" + db).setSocketTimeout(10000)
-								.setPort(7102).setMaxTimeoutWhenExhausted(2000)
-								.setMaxConnsPerHost(3).setInitConnsPerHost(1)
+								+ "_" + db)
+								.setSocketTimeout(10000)
+								.setPort(7102)
+								.setMaxConnsPerHost(10).setInitConnsPerHost(3)
 								.setSeeds(null))
 				.withConnectionPoolMonitor(new CountingConnectionPoolMonitor())
 				.buildKeyspace(ThriftFamilyFactory.getInstance());
@@ -100,16 +101,16 @@ public class AstyanaxCassandraConnection implements PaasConnection {
 	                                NodeDiscoveryType.RING_DESCRIBE)
 	                        .setConnectionPoolType(
 	                                ConnectionPoolType.TOKEN_AWARE)
-	                        .setDiscoveryDelayInSeconds(60000)
+	                        .setDiscoveryDelayInSeconds(60)
 	                        .setTargetCassandraVersion("1.2")
 	                        .setCqlVersion("3.0.0"))
 	                        //.withHostSupplier(hs.getSupplier(clustername))
 	        .withConnectionPoolConfiguration(
 	                new ConnectionPoolConfigurationImpl(clusterNameOnly
 	                        + "_" + db)
-	                        .setSocketTimeout(3000)
-	                        .setMaxTimeoutWhenExhausted(2000)
-	                        .setMaxConnsPerHost(3).setInitConnsPerHost(1)	 
+	                        .setSocketTimeout(11000)
+	                        .setConnectTimeout(2000)
+	                        .setMaxConnsPerHost(10).setInitConnsPerHost(3)	 
 	                      .setSeeds(clusterNameOnly+":"+clusterPortOnly))
 	         .buildKeyspace(ThriftFamilyFactory.getInstance());
 		}
