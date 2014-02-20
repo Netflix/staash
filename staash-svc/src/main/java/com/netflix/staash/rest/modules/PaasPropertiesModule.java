@@ -172,7 +172,6 @@ public class PaasPropertiesModule extends AbstractModule {
         return datasvc;
     }
     @Provides
-    @Singleton
     CacheService provideCacheService(@Named("newmetadao") MetaDao metad) {
         return new CacheService(metad);
     }
