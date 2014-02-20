@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.UUID;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -175,7 +177,7 @@ public class StaashDataResourceImpl {
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@FormDataParam("value") FormDataContentDisposition fileDetail) {
 		try {
-			writeToChunkedKVStore(fileDetail.getFileName(), uploadedInputStream);
+			writeToChunkedKVStore(uploadedInputStream, fileDetail.getFileName());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "{\"msg\":\"file could not be uploaded\"}";
@@ -191,7 +193,7 @@ public class StaashDataResourceImpl {
 			@FormDataParam("value") InputStream uploadedInputStream,
 			@PathParam("name") String name) {
 		try {
-			writeToChunkedKVStore(name, uploadedInputStream);
+			writeToChunkedKVStore(uploadedInputStream, name);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "{\"msg\":\"file could not be uploaded\"}";
@@ -199,12 +201,13 @@ public class StaashDataResourceImpl {
 		return "{\"msg\":\"file successfully uploaded\"}";
 	}
 	
-	private void writeToChunkedKVStore(String objectName, InputStream is) throws IOException {
+	private void writeToChunkedKVStore(InputStream is, String objectName) throws IOException {
 		InputStream input = null;
+		File tmpFile = null;
 		try {
-			String uploadedFileLocation = "/tmp/" + objectName;
-			OutputStream out = new FileOutputStream(new File(
-					uploadedFileLocation));
+			String uploadedFileLocation = "/tmp/" + "staashFile-" + UUID.randomUUID();
+			tmpFile = new File(uploadedFileLocation);
+			OutputStream out = new FileOutputStream(tmpFile);
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
@@ -227,6 +230,9 @@ public class StaashDataResourceImpl {
 			throw new RuntimeException(e.getMessage());
 		} finally {
 			if (input!=null) input.close();
+			if (tmpFile!=null) {
+				tmpFile.delete();
+			}
 		}
 	}
 //

@@ -162,7 +162,6 @@ public class PaasPropertiesModule extends AbstractModule {
         else  return new AstyanaxMetaDaoImpl(keyspace);
     }
     @Provides
-    @Singleton
     MetaService providePaasMetaService(@Named("newmetadao") MetaDao metad, ConnectionFactory fac, CacheService cache) {
         PaasMetaService metasvc = new PaasMetaService(metad, fac, cache);
         return metasvc;
