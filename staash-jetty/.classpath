@@ -6,10 +6,10 @@
 	<classpathentry exported="true" kind="src" path="/staash-astyanax"/>
 	<classpathentry exported="true" kind="src" path="/staash-core"/>
 	<classpathentry exported="true" kind="src" path="/staash-eureka"/>
-	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
-	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
 	<classpathentry kind="con" path="org.springsource.ide.eclipse.gradle.dsld.classpathcontainer"/>
+	<classpathentry kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

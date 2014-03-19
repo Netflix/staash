@@ -26,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 import com.google.inject.Inject;
 import com.netflix.staash.exception.StorageDoesNotExistException;
 import com.netflix.staash.json.JsonObject;
@@ -35,7 +36,7 @@ import com.sun.jersey.spi.container.ResourceFilters;
 
 @Path("/staash/v1/admin")
 public class StaashAdminResourceImpl {
-    private MetaService metasvc;
+    private final MetaService metasvc;
     @Inject
     public StaashAdminResourceImpl(MetaService meta) {
         this.metasvc = meta;
@@ -57,7 +58,7 @@ public class StaashAdminResourceImpl {
         String storages = metasvc.listStorage();
         return storages;
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/db/{schema}")
@@ -66,7 +67,7 @@ public class StaashAdminResourceImpl {
         String schemas = metasvc.listTablesInSchema(schema);
         return schemas;
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/timeseries/{schema}")
@@ -75,7 +76,7 @@ public class StaashAdminResourceImpl {
         String schemas = metasvc.listTimeseriesInSchema(schema);
         return schemas;
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -109,26 +110,27 @@ public class StaashAdminResourceImpl {
         return obj.toString();
     }
 
-        
+
     @POST
     @Path("{schema}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ResourceFilters(StaashAuditFilter.class)
     public String createTable(@PathParam("schema") String schemaName, String payload) {
-        JsonObject obj;
+    	JsonObject msg;
         try {
             if (payload!=null) {
+                JsonObject obj;
                 obj = new JsonObject(payload).putString("db", schemaName);
                 return metasvc.writeMetaEntity(EntityType.TABLE, obj.toString());
             }
-            obj = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
+            msg = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
         } catch (StorageDoesNotExistException e) {
-            obj = new JsonObject("\"message\":\"Storage Does Not Exist\""); 
+        	msg = new JsonObject("\"message\":\"Storage Does Not Exist\"");
         }
-        return obj.toString();
+        return msg.toString();
     }
-    
+
     @POST
     @Path("/timeseries/{schema}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -136,15 +138,16 @@ public class StaashAdminResourceImpl {
     @ResourceFilters(StaashAuditFilter.class)
     public String createTimeseries(@PathParam("schema") String schemaName, String payload) {
 
-    	JsonObject obj;
+    	JsonObject msg;
         try {
             if (payload!=null) {
-                return metasvc.writeMetaEntity(EntityType.SERIES, payload);
+                JsonObject obj = new JsonObject(payload).putString("db", schemaName);
+                return metasvc.writeMetaEntity(EntityType.SERIES, obj.toString());
             }
-            obj = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
+            msg = new JsonObject("{\"message\":\"payload can not be null must conform to: {name:<name>,cluster:<cluster>}\"");
         } catch (StorageDoesNotExistException e) {
-            obj = new JsonObject("\"message\":\"Storage Does Not Exist\"");
+            msg = new JsonObject("\"message\":\"Storage Does Not Exist\"");
         }
-        return obj.toString();
+        return msg.toString();
     }
 }
