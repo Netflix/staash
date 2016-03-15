@@ -62,7 +62,7 @@ public class TestPaasRest {
     @Test
     @Ignore
     public void testCreateTable() {
-        String storage = "{\"name\": \"unit.mysql\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://localhost:3306/\",\"host\":\"localhost\",\"user\":\"root\",\"password\":\"\",\"replicate\":\"another\"}";
+        String storage = "{\"name\": \"unit.mysql\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://localhost:3306/\",\"host\":\"localhost\",\"user\":\"netflix\",\"password\":\"\",\"oss\":\"another\"}";
         try {
             metasvc.writeMetaEntity(EntityType.STORAGE, storage);
         } catch (StorageDoesNotExistException e) {
@@ -163,7 +163,7 @@ public class TestPaasRest {
     @Test
     @Ignore
     public void testInsertRowMySql() {
-        String storage = "{\"name\": \"unit.mysql\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://localhost:3306/\",\"host\":\"localhost\",\"user\":\"root\",\"password\":\"\",\"replicate\":\"another\"}";
+        String storage = "{\"name\": \"unit.mysql\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://localhost:3306/\",\"host\":\"localhost\",\"user\":\"dummy\",\"password\":\"\",\"dummy\":\"another\"}";
         try {
             metasvc.writeMetaEntity(EntityType.STORAGE, storage);
         } catch (StorageDoesNotExistException e) {
@@ -198,7 +198,7 @@ public class TestPaasRest {
     @Test
     @Ignore
   public void testInsertRowMySqlRemote() {
-      String storage = "{\"name\": \"unit.mysqlremote\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://cde.ceqg1dgfu0mp.us-east-1.rds.amazonaws.com:3306/\",\"host\":\"cde.ceqg1dgfu0mp.us-east-1.rds.amazonaws.com\",\"user\":\"cdeuser\",\"password\":\"cdeuser123\",\"replicate\":\"another\"}";
+      String storage = "{\"name\": \"unit.mysqlremote\",\"type\": \"mysql\",\"jdbcurl\": \"jdbc:mysql://test.ceqg1dgfu0mp.useast1.rds.amazonaws.com:3306/\",\"host\":\"test.ceqg1dgfu0mp.useast-1.rds.amazonaws.com\",\"user\":\"dummy\",\"password\":\"dummy\",\"replicate\":\"another\"}";
       try {
         metasvc.writeMetaEntity(EntityType.STORAGE, storage);
     } catch (StorageDoesNotExistException e) {
